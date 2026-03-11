@@ -47,7 +47,7 @@ export default function Navbar() {
     //get profile only if there is an existing user this prevents null value on localStorage
     if(user) getProfile()
 
-  }, [])
+  }, [user])
 
   return (
     <>
