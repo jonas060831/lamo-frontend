@@ -20,18 +20,18 @@ body {
 
 
 
-
-
-
 /* preferences */
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {
         --bg: var(--dark-bg);
         --font-color: var(--dark-font-color);
         --link-color: var(--dark-link-font-color);
         --accent-color: var(--dark-link-font-color);
         --footer-background-color: var(--dark-footer-bakcground-color);
+    }
+    .svg {
+        filter: invert(1);
     }
 }
 
@@ -43,4 +43,44 @@ body {
         --accent-color: var(--light-link-font-color);
         --footer-background-color: var(--light-footer-background-color);
     }
+    .svg {
+        filter: invert(0);
+    }
+} */
+
+/* Dark theme */
+html[data-theme="dark"] {
+  --bg: #2b2b2b;
+  --font-color: #fff;
+  --link-color: #ff8800;
+  --accent-color: #ff8800;
+  --footer-background-color: #1a1a1a;
+
+  /* Optional: invert SVGs that are <img> tags */
+  .svg {
+    filter: invert(1);
+  }
 }
+
+/* Light theme */
+html[data-theme="light"] {
+  --bg: #fff;
+  --font-color: #000;
+  --link-color: rgb(0, 121, 251);
+  --accent-color: rgb(0, 121, 251);
+  --footer-background-color: #f5f5f5;
+
+  .svg {
+    filter: invert(0);
+  }
+}
+
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+/* @media (max-width: 767px) { } */
