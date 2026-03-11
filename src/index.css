@@ -22,7 +22,7 @@ body {
 
 /* preferences */
 
-/* @media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: dark) {
     :root {
         --bg: var(--dark-bg);
         --font-color: var(--dark-font-color);
@@ -46,7 +46,7 @@ body {
     .svg {
         filter: invert(0);
     }
-} */
+}
 
 /* Dark theme */
 html[data-theme="dark"] {

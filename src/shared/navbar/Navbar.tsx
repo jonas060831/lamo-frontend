@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
 
@@ -7,15 +7,47 @@ import arrowRight from '../../assets/svgs/arrowRight.svg'
 import lightIcon from '../../assets/svgs/sun.svg'
 import darkIcon from '../../assets/svgs/moon.svg'
 
-import { Link } from "react-router";
 import useTheme from "../../hooks/useTheme";
+import { useAuth, type IUser } from "../../contexts/UserContext";
+
+import * as authService from '../../services/authService'
+
+
+
+interface IProfile extends IUser {
+  avatarImg: string
+  firstName?: string
+  lastName?: string
+}
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [profile, setProfile] = useState< IProfile | null>(null)
 
   const { theme, toggleTheme } = useTheme()
 
+  const { user } = useAuth()
 
-  const handleDismiss = () => setOpen(false)
+
+  //const handleDismiss = () => setOpen(false)
+
+  useEffect(() => {
+
+    const getProfile = async () => {
+
+      try {
+        const { userInfo } = await authService.myProfile()
+        setProfile(userInfo)
+
+      } catch (error) {
+        const errMessage = error instanceof Error ? error.message : 'Server Error'
+        console.log(errMessage)
+      }
+    }
+
+    //get profile only if there is an existing user this prevents null value on localStorage
+    if(user) getProfile()
+
+  }, [])
 
   return (
     <>
@@ -67,7 +99,17 @@ export default function Navbar() {
               </button>
 
               <ul className={styles.links}>
-                <li onClick={handleDismiss}><Link to="/">Home</Link></li>
+                <li>
+                   {
+                    profile ? (
+                      <>
+                        <img src={`${profile.avatarImg}`} style={{ width: '5rem', height: 'auto'}} />
+                      </>
+                    ) : (
+                      <>Login ?</>
+                    )
+                   }
+                </li>
                 <li>
                     <label className={styles.themeToggle}>
                       <input

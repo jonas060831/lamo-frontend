@@ -32,6 +32,39 @@ const signIn = async (formData: credentialProps) => {
     }
 }
 
+const myProfile = async () => {
+  try {
+    const options = {
+      headers: {
+        'Content-Type' : 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+
+    const res = await fetch(`${BASE_URL}/my-profile`, options)
+
+    const { user } = await res.json()
+
+    if(user.error) throw new Error(user.error)
+
+    const userInfo = {
+        _id: user._id,
+        username: user.username,
+        avatarImg: user.profile.avatarImg,
+        firstName: user.profile.firstName,
+        lastName: user.profile.lastName
+    }
+    
+    return { userInfo }
+
+  } catch (error) {
+    console.log(error)
+    const errorMsg = error instanceof Error ? error.message : 'Server Error'
+    throw new Error(errorMsg)
+  }
+}
+
 export {
-    signIn
+    signIn,
+    myProfile
 }
