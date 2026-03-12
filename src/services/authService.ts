@@ -46,7 +46,7 @@ const signIn = async (formData: basicAuthType) =>  {
 
         const data = await res.json()
 
-        if(data.error) throw new Error(data.error)
+        if(!res.ok) throw new Error(data.error)
 
         if (data.token) {
          localStorage.setItem('token', data.token);
