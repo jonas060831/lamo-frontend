@@ -11,6 +11,8 @@ import useTheme from "../../hooks/useTheme";
 import { useAuth, type IUser } from "../../contexts/UserContext";
 
 import * as authService from '../../services/authService'
+import PillButton from "../forms/controls/Buttons/PillButton/PillButton";
+import { useNavigate } from "react-router";
 
 
 
@@ -20,6 +22,8 @@ interface IProfile extends IUser {
   lastName?: string
 }
 export default function Navbar() {
+
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false);
   const [profile, setProfile] = useState< IProfile | null>(null)
 
@@ -28,7 +32,7 @@ export default function Navbar() {
   const { user } = useAuth()
 
 
-  //const handleDismiss = () => setOpen(false)
+  const handleDismiss = () => setOpen(false)
 
   useEffect(() => {
 
@@ -48,6 +52,11 @@ export default function Navbar() {
     if(user) getProfile()
 
   }, [user])
+
+  const handleSignIn = () => {
+    navigate('/sign-in')
+    handleDismiss()
+  }
 
   return (
     <>
@@ -106,7 +115,13 @@ export default function Navbar() {
                         <img src={`${profile.avatarImg}`} style={{ width: '5rem', height: 'auto'}} />
                       </>
                     ) : (
-                      <>Login ?</>
+                      <>
+                       <PillButton
+                        title="Sign In"
+                        iconName="arrowRight"
+                        handleClick={handleSignIn} //go to sign in form component
+                       />
+                      </>
                     )
                    }
                 </li>

@@ -1,0 +1,45 @@
+:root {
+    --light-dynamic-button-color: #f8f9fa;
+    --dark-dynamic-button-color: #c2a6fd;
+}
+
+/* preferences */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --dynamic-button-color: var(--dark-dynamic-button-color);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --dynamic-button-color: var(--light-dynamic-button-color);
+    }
+}
+
+.button {
+    border: none;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    border-radius: 100vw;
+    cursor: pointer;
+    color: var(--font-color);
+}
+
+.dynamic {
+    background-color: var(--dynamic-button-color);
+}
+
+
+/* Dark theme */
+html[data-theme="dark"] {
+  --dynamic-button-color: var(--dark-dynamic-button-color);
+}
+
+/* Light theme */
+html[data-theme="light"] {
+  --dynamic-button-color: var(--light-dynamic-button-color);
+}

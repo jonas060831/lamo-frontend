@@ -16,7 +16,9 @@ body {
     color: var(--font-color);
 }
 
-
+a {
+    color: var(--link-color);
+}
 
 
 
@@ -54,7 +56,6 @@ html[data-theme="dark"] {
   --font-color: #fff;
   --link-color: #ff8800;
   --accent-color: #ff8800;
-  --footer-background-color: #1a1a1a;
 
   /* Optional: invert SVGs that are <img> tags */
   .svg {
@@ -68,7 +69,6 @@ html[data-theme="light"] {
   --font-color: #000;
   --link-color: rgb(0, 121, 251);
   --accent-color: rgb(0, 121, 251);
-  --footer-background-color: #f5f5f5;
 
   .svg {
     filter: invert(0);
