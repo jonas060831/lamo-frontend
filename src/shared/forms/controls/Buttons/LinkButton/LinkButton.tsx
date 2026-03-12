@@ -2,24 +2,25 @@ import { type FC } from "react"
 
 import arrowRight from '../../../../../assets/svgs/arrowRight.svg'
 import loading from '../../../../../assets/svgs/loading.svg'
+import powerOff from '../../../../../assets/svgs/power-off.svg'
 
-type PillButtonProps = {
+type LinkButtonProps = {
     title: string
-    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
-    iconName?: 'arrowRight' | 'loading'
+    iconName?: 'arrowRight' | 'loading' | 'powerOff'
     handleClick?: () => void
 }
 
-import styles from './PillButton.module.css'
+import styles from './LinkButton.module.css'
 
-const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='loading', handleClick  }) => {
+const LinkButton:FC<LinkButtonProps> = ({ title, iconName='loading', handleClick }) => {
 
   
   const renderIcon = () => {
 
     const iconMap = {
         'arrowRight' : arrowRight,
-        'loading' : loading
+        'loading' : loading,
+        'powerOff' : powerOff
     }
 
     const svgSource = iconMap[iconName]
@@ -35,7 +36,7 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
 
   return (
     <button 
-     className={`${styles.button} ${styles[variant]}`}
+     className={`${styles.button} ${styles.linkButton}`}
      onClick={handleClick}
     >
         {renderIcon()}
@@ -44,4 +45,4 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
   )
 }
 
-export default PillButton
+export default LinkButton

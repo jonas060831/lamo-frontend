@@ -13,6 +13,7 @@ import { useAuth, type IUser } from "../../contexts/UserContext";
 import * as authService from '../../services/authService'
 import PillButton from "../forms/controls/Buttons/PillButton/PillButton";
 import { useNavigate } from "react-router";
+import LinkButton from "../forms/controls/Buttons/LinkButton/LinkButton";
 
 
 
@@ -29,7 +30,8 @@ export default function Navbar() {
 
   const { theme, toggleTheme } = useTheme()
 
-  const { user } = useAuth()
+
+  const { user, setUser } = useAuth()
 
 
   const handleDismiss = () => setOpen(false)
@@ -56,6 +58,12 @@ export default function Navbar() {
   const handleSignIn = () => {
     navigate('/sign-in')
     handleDismiss()
+  }
+
+  const handleSignOut = () => {
+    localStorage.removeItem('token')
+    setUser(null) 
+    setProfile(null)
   }
 
   return (
@@ -125,6 +133,7 @@ export default function Navbar() {
                     )
                    }
                 </li>
+
                 <li>
                     <label className={styles.themeToggle}>
                       <input
@@ -141,7 +150,18 @@ export default function Navbar() {
                         />
                       </span>
                     </label>
-                  </li>
+                </li>
+
+                <li>
+                  {
+                    user && 
+                    <LinkButton
+                      title="Sign Out"
+                      iconName="powerOff"
+                      handleClick={handleSignOut}
+                    />
+                  }
+                </li>
 
               </ul>
             </motion.div>

@@ -1,0 +1,15 @@
+.button {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    border-radius: 100vw;
+    cursor: pointer;
+    color: var(--font-color);
+    background: none;
+}
+
+.button:hover {
+    opacity: 0.8;
+}
