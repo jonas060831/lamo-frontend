@@ -7,7 +7,7 @@ type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
     iconName?: 'arrowRight' | 'loading'
-    handleClick: () => void
+    handleClick?: () => void
 }
 
 import styles from './PillButton.module.css'

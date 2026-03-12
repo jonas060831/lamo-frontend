@@ -6,6 +6,7 @@ import * as authService from '../../../services/authService'
 import { useAuth } from '../../../contexts/UserContext'
 
 import { useNavigate, Navigate } from 'react-router'
+import PillButton from '../controls/Buttons/PillButton/PillButton'
 
 export type basicAuthType = {
   username: string
@@ -22,24 +23,25 @@ const SignInForm = () => {
     password: ''
   })
 
-  const [message, setMessage] = useState<string>('')
+  const [message, setMessage] = useState<string>('1')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setMessage('')
+    setMessage('1')
     setFormData({ ...formData, [event.target.name]: event.target.value })
   }
 
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
+    setIsLoading(true)
     event.preventDefault()
-
     try {
       const res = await authService.signIn(formData)
-
       setUser(res)
       navigate('/')
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Server Error'
+      setIsLoading(false)
       setMessage(errorMessage)
     }
   }
@@ -52,7 +54,7 @@ const SignInForm = () => {
     <main className={styles.container}>
       <section style={{ width: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', margin: '0px auto' }}>
         <h1>Sign In</h1>
-        <p>{message}</p>
+        <p style={{ visibility: message.length > 1 ? 'visible' : 'hidden', color: 'red' }}>{message}</p>
 
         <form
          className={styles.signInFormContainer}
@@ -80,7 +82,10 @@ const SignInForm = () => {
           />
 
           <div>
-            <button>Sign In</button>
+            <PillButton
+             title='Sign In'
+             iconName={ isLoading ? 'loading' : 'arrowRight'}
+            />
           </div>
         </form>
       </section>
