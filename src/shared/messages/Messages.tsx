@@ -8,24 +8,22 @@ export interface MessageProps {
     sender: 'user' | 'ai' | string //change this to uuid later
     timestamp: Date;
     usedContext?: boolean
-
+    
 }
 
 type ExchangeProps = {
- exchange?: MessageProps
+ exchange?: MessageProps | null
+ status: boolean | null
 }
 
-const Messages:FC<ExchangeProps> = ({ exchange }) => {
+const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
 
   const [exchanges, setExchanges] = useState<MessageProps[] | []>([])
 
   useEffect(() => {
-    console.log(exchange)
     if(exchange) setExchanges(prev => [...prev, exchange])
 
   }, [exchange])
-
-  if(!exchange) return <></>
 
   return (
     <div 
@@ -33,11 +31,26 @@ const Messages:FC<ExchangeProps> = ({ exchange }) => {
      style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}
     >
         {
-            exchanges?.map((exchange, idx) => (
+            exchanges.length == 0 ? (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '85vh' }}>
+                    <h3>Testing Ollama LLM</h3>
+                </div>
+            )
+            : (
+                exchanges.map((exchange, idx) => (
                 <div key={idx} style={{ backgroundColor: exchange.sender !== 'ai' ? 'red' : 'none', }}>
                     {exchange.text}
                 </div>
             ))
+            )
+        }
+        {/* awaiting response */}
+        {
+            status && (
+                <div className={styles.statusMessageContainer}>
+                    Generating Response
+                </div>
+            )
         }
     </div>
   )

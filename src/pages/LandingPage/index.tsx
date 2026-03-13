@@ -10,6 +10,11 @@ const LandingPage = () => {
 
   
   const [exchange, setExchange] = useState<MessageProps>()
+  const [responseStatus, setResponseStatus] = useState<boolean | null>(null)
+
+  const handleResponseStatus = (isLoading: boolean) => {
+    setResponseStatus(isLoading)
+  }
   const handleChatResponse = (response: MessageProps) => {
     setExchange(response)
   }
@@ -20,11 +25,17 @@ const LandingPage = () => {
       className={styles.container}
       >
         <section>
-          <Messages exchange={exchange}/>
+          <Messages
+           exchange={exchange}
+           status={responseStatus}
+          />
         </section>
 
         <section className={styles.chatInputContainer}>
-          <ChatInput onResponse={handleChatResponse}/>
+          <ChatInput
+           onResponse={handleChatResponse}
+           onResponseStatus={handleResponseStatus}
+          />
         </section>
 
       </main>

@@ -7,9 +7,10 @@ import * as lamoService from '../../services/lamoService'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void
+    onResponseStatus: (isLoading: boolean) => void
 }
 
-const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
+const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
 
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
@@ -22,7 +23,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
     if(!input.trim()) return
 
     setIsLoading(true)
-
+    onResponseStatus(true)
     const userMessage: MessageProps = {
         id: Date.now().toString(),
         text: input,
@@ -42,6 +43,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
             timestamp: new Date()
         }
         onResponse(aiResponse)
+        onResponseStatus(false)
         setIsLoading(false)
         focusInput()
     } catch (error) {
@@ -54,6 +56,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
             timestamp: new Date()
         }
         onResponse(aiResponse)
+        onResponseStatus(false)
         setIsLoading(false)
         focusInput()
     }
