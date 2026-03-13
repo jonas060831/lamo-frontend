@@ -1,4 +1,5 @@
 import { useAuth } from "./contexts/UserContext"
+import LandingPage from "./pages/LandingPage"
 import SignInForm from "./shared/forms/signIn/SignInForm"
 import Navbar from "./shared/navbar/Navbar"
 import { Routes, Route } from 'react-router'
@@ -11,7 +12,7 @@ const  App = ()  => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={ user ? 'Authed Dashboard' : 'Landing Page' }/>
+        <Route path="/" element={ user ? 'Authed Dashboard' : <LandingPage/> }/>
 
         <Route path="/sign-in" element={ <SignInForm /> } />
         {

@@ -1,0 +1,33 @@
+.container {
+    position: relative;
+    height: 87vh;
+    display: flex;
+    overflow-y: scroll;
+    display: flex;
+    padding: 0px 5vw;
+}
+
+.chatContainer {
+    position: fixed;
+    bottom: 2vw;
+    width: 100%;
+    max-width: 60vw;
+    right: 20vw;
+}
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+@media (max-width: 767px) {
+    .chatContainer {
+        position: fixed;
+        bottom: 1vw;
+        width: 100%;
+        max-width: 90vw;
+        right: 5vw;
+    }
+}
