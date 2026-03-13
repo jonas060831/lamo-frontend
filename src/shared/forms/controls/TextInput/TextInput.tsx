@@ -1,5 +1,8 @@
-import { useState, type ChangeEvent, type FC } from 'react'
+import { useState, type ChangeEvent, type FC, type MouseEventHandler } from 'react'
 import styles from '../controls.module.css'
+
+import eyeOpen from '../../../../assets/svgs/eyeOpen.svg'
+import eyeClose from '../../../../assets/svgs/eyeClose.svg'
 
 type TextInputType = {
   name: string
@@ -20,13 +23,21 @@ const TextInput: FC<TextInputType> = ({
   handleChange,
   required=false
 }) => {
-  const [isFocused, setIsFocused] = useState(false)
+  const [isFocused, setIsFocused] = useState<boolean>(false)
+  const [isPasswordHidden, setIsPasswordHidden] = useState<boolean>(true)
+  const [tempType, setTempType] = useState<'text' | 'email' | 'password'>('password')
+
+  const togglePasswordVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    setIsPasswordHidden(prev => !prev)
+
+  }
 
   return (
     <div className={styles.inputContainer}>
       <input
         name={name}
-        type={type}
+        type={type == 'password' && !isPasswordHidden ? 'text' : type }
         id={name}
         autoComplete="off"
         value={value}
@@ -42,6 +53,26 @@ const TextInput: FC<TextInputType> = ({
       >
         {label}
       </label>
+
+      {
+        (type === "password" && value.length > 0) && (
+          <button
+           className={styles.passwordVisibilityToggle}
+           onClick={togglePasswordVisibility}
+           type='button'
+          >
+            {
+              isPasswordHidden ? (
+                <>
+                  <img className={`svg ${styles.passwordSvg}`} src={eyeClose} alt='eye close' />
+                </>
+              ) : (
+                <img className={`svg ${styles.passwordSvg}`} src={eyeOpen} alt='eye open'/>
+              )
+            }
+          </button>
+        )
+      }
     </div>
   )
 }

@@ -44,3 +44,16 @@
 .inputContainer input:focus {
     box-shadow: 0 0 0 2px #c2a6fd;
 }
+
+.passwordVisibilityToggle {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+}
+
+.passwordSvg {
+    width: 1.5rem;
+    cursor: pointer;
+}
