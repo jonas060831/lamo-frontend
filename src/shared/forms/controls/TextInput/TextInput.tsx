@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type FC, type MouseEventHandler } from 'react'
+import { useState, type ChangeEvent, type FC } from 'react'
 import styles from '../controls.module.css'
 
 import eyeOpen from '../../../../assets/svgs/eyeOpen.svg'
@@ -25,7 +25,6 @@ const TextInput: FC<TextInputType> = ({
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false)
   const [isPasswordHidden, setIsPasswordHidden] = useState<boolean>(true)
-  const [tempType, setTempType] = useState<'text' | 'email' | 'password'>('password')
 
   const togglePasswordVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()

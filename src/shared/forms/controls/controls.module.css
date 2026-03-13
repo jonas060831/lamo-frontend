@@ -50,10 +50,16 @@
     border: none;
     position: absolute;
     right: 15px;
-    top: 15px;
+    top: 10px;
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+}
+.passwordVisibilityToggle:hover {
+    background: rgba(146, 145, 145, 0.088);
+    border-radius: 100vw;
 }
 
 .passwordSvg {
     width: 1.5rem;
-    cursor: pointer;
 }
