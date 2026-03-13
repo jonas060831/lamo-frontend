@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "framer-motion": "^12.35.2",
+    "highlight.js": "^11.11.1",
     "modern-normalize": "^3.0.1",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",

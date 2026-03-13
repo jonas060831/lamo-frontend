@@ -1,0 +1,12 @@
+pre {
+  background: #282c34;
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  width: 45vw;
+}
+
+code {
+  font-family: monospace;
+  font-weight: 600;
+}

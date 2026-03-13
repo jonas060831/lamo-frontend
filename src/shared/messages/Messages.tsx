@@ -1,6 +1,9 @@
 
 import { useEffect, useRef, useState, type FC } from 'react'
 import styles from './Messages.module.css'
+import highLightCodeSection from '../../utils/codeHighlightSupport'
+import hljs from "highlight.js";
+import "highlight.js/styles/atom-one-dark.css";
 
 export interface MessageProps {
     id: string
@@ -34,8 +37,53 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
     scrollToBottom()
   }, [exchanges])
 
+  useEffect(() => {
+    document.querySelectorAll("pre code").forEach((block) => {
+      hljs.highlightElement(block as HTMLElement);
+    });
+  }, [exchanges]);
+
 
   const scrollToBottom = () => messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+
+  const renderExchangeContent = (text: string) => {
+
+    const parts = text.split(/```([\s\S]*?)```/g);
+
+    return parts.map((part, index) => {
+
+      // CODE BLOCK
+      if (index % 2 === 1) {
+        return highLightCodeSection(part, index);
+      }
+
+      // TEXT / HEADERS 
+      const segments = part.split(/(\*\*.*?\*\*|!\[.*?\]\(.*?\))/g);
+
+      return segments.map((segment, i) => {
+
+        // HEADER **text**
+        if (segment.startsWith("**") && segment.endsWith("**")) {
+          const headerText = segment.replace(/\*\*/g, "").trim();
+
+          return (
+            <h2 key={`${index}-${i}`} className={styles.messageHeader}>
+              {headerText}
+            </h2>
+          );
+        }
+
+        // NORMAL TEXT
+        return segment.trim() ? (
+          <p key={`${index}-${i}`} className={styles.messageText}>
+            {segment}
+          </p>
+        ) : null;
+      });
+
+    })
+
+  }
 
   return (
     <div className={styles.container} >
@@ -55,8 +103,12 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
                     <div
                      className={`${styles.message} ${exchange.sender === 'user' ? styles.userMessage : styles.aiMessage}`}
                     >
-                        {exchange.text}
 
+                        {/* process text for both user and ai */}
+                        {/* code support */}
+                        {renderExchangeContent(exchange.text)}
+
+                        
                     </div>
                 </div>
             ))
