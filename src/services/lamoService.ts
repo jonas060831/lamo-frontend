@@ -1,6 +1,6 @@
 const BASE_URL = `${import.meta.env.VITE_LAMO_AI_SERVER_URL}`
 
-const smartQuery = async (textQuery: string) => {
+const smartQuery = async (textQuery: string, sessionId: string) => {
 
         /*
         Testing: Relevance Check between supplied context and LLM general knowledge
@@ -15,7 +15,7 @@ const smartQuery = async (textQuery: string) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ question: textQuery })
+            body: JSON.stringify({ question: textQuery, session_id: sessionId })
         }
         const req = await fetch(`${BASE_URL}/smart-query`, options)
 

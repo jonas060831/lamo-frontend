@@ -14,8 +14,10 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
 
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
+  const [sessionId] = useState(() => crypto.randomUUID())
 
   const inputRef = useRef<HTMLInputElement>(null)
+
   
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -25,7 +27,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
     setIsLoading(true)
     onResponseStatus(true)
     const userMessage: MessageProps = {
-        id: Date.now().toString(),
+        id: (Date.now() + 1).toString(),
         text: input,
         sender: 'user',
         timestamp: new Date()
@@ -34,11 +36,11 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
     setInput('')
 
     try {
-        const res = await lamoService.smartQuery(input)
+        const res = await lamoService.smartQuery(input, sessionId)
 
         const aiResponse: MessageProps = {
             id: Date.now().toString(),
-            text: res.answer,
+            text: res.answer || res.error || 'I could not process your request.',
             sender: 'ai',
             timestamp: new Date()
         }
