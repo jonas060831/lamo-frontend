@@ -7,13 +7,21 @@
 }
 
 
+.emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 70vh;
+}
+
 
 .statusMessageContainer {
   animation: dimEffect 2s linear infinite alternate;
+  opacity: 0.7;
 }
 
 @keyframes dimEffect {
-  from { opacity: 1; }
+  from { opacity: 0.7; }
   to { opacity: 0.3; }
 }
 
@@ -31,5 +39,12 @@
         max-width: 90vw;
         padding-bottom: 100px;
         margin-left: 2px;
+    }
+    .emptyState {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 70vh;
+        width: 85vw;
     }
 }

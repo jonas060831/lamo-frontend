@@ -32,7 +32,7 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
     >
         {
             exchanges.length == 0 ? (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '85vh' }}>
+                <div className={styles.emptyState}>
                     <h3>Testing Ollama LLM</h3>
                 </div>
             )
