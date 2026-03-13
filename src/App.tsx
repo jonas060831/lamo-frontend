@@ -12,7 +12,7 @@ const  App = ()  => {
     <>
       <Navbar />
       <Routes>
-        <Route path="/" element={ user ? 'Authed Dashboard' : <LandingPage/> }/>
+        <Route path="/" element={ user ? 'Authed User' : <LandingPage /> }/>
 
         <Route path="/sign-in" element={ <SignInForm /> } />
         {

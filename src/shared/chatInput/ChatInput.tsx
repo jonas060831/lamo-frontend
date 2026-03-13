@@ -14,7 +14,8 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
 
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
-  const [sessionId] = useState(() => crypto.randomUUID())
+  const [sessionId] = useState(() => `session_${Date.now()}`); // Unique session ID
+  
 
   const inputRef = useRef<HTMLInputElement>(null)
 
