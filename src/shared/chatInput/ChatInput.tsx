@@ -1,5 +1,5 @@
 
-import { useState, type FC, type SubmitEvent } from 'react'
+import { useRef, useState, type FC, type SubmitEvent } from 'react'
 import styles from './ChatInput.module.css'
 import CircleButton from '../forms/controls/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
@@ -12,11 +12,16 @@ type ChatInputProps = {
 const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
 
   const [ input, setInput ] = useState<string>('')
+  const [ isLoading, setIsLoading ] = useState<boolean>(false)
+
+  const inputRef = useRef<HTMLInputElement>(null)
   
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
 
     if(!input.trim()) return
+
+    setIsLoading(true)
 
     const userMessage: MessageProps = {
         id: Date.now().toString(),
@@ -37,6 +42,8 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
             timestamp: new Date()
         }
         onResponse(aiResponse)
+        setIsLoading(false)
+        focusInput()
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Server Error'
         
@@ -47,9 +54,15 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
             timestamp: new Date()
         }
         onResponse(aiResponse)
+        setIsLoading(false)
+        focusInput()
     }
-    
+  }
 
+  const focusInput = () => {
+
+    if(!inputRef.current) return
+    inputRef.current.focus()
   }
 
   return (
@@ -60,6 +73,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
 
             <input
              name='chatboxTextArea'
+             ref={inputRef}
              onChange={(event) => setInput(event.target.value)}
              placeholder='ask me anything'
              value={input}
@@ -68,7 +82,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
 
 
             <div className={styles.buttonContainer}>
-                <CircleButton iconName='ai' iconSize={30}/>
+                <CircleButton iconName={isLoading ? 'loading' : 'ai'} iconSize={30}/>
             </div>
         </form>
     </div>
