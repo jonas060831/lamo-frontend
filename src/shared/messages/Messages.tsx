@@ -1,5 +1,5 @@
 
-import { useEffect, useState, type FC } from 'react'
+import { useEffect, useRef, useState, type FC } from 'react'
 import styles from './Messages.module.css'
 
 export interface MessageProps {
@@ -18,12 +18,24 @@ type ExchangeProps = {
 
 const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
 
+  const messageEndRef = useRef<HTMLDivElement | null>(null)
+
   const [exchanges, setExchanges] = useState<MessageProps[] | []>([])
 
   useEffect(() => {
+    //push new exchange in the state TODO: will save to DB later on
     if(exchange) setExchanges(prev => [...prev, exchange])
 
   }, [exchange])
+
+  
+  useEffect(() => {
+    //scroll to bottom whenever exchanges array is updated
+    scrollToBottom()
+  }, [exchanges])
+
+
+  const scrollToBottom = () => messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
 
   return (
     <div 
@@ -52,6 +64,9 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
                 </div>
             )
         }
+        {/* hidden div to programatically scroll to bottom of the page */}
+
+        <div ref={messageEndRef}/>
     </div>
   )
 }
