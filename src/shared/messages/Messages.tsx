@@ -38,10 +38,7 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
   const scrollToBottom = () => messageEndRef.current?.scrollIntoView({ behavior: 'smooth' })
 
   return (
-    <div 
-     className={styles.container}
-     style={{ display: 'flex', flexDirection: 'column', gap: '1rem'}}
-    >
+    <div className={styles.container} >
         {
             exchanges.length == 0 ? (
                 <div className={styles.emptyState}>
@@ -49,8 +46,12 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
                 </div>
             )
             : (
-                exchanges.map((exchange, idx) => (
-                <div key={idx} style={{ backgroundColor: exchange.sender !== 'ai' ? 'red' : 'none', }}>
+                exchanges.map( exchange => (
+                <div
+                 key={exchange.id}
+                 //add the wrapper base on who is the sender
+                 className={`${styles.exchangeWrapper} ${exchange.sender === 'user' ? styles.userBubble : styles.aiResponseWrapper }`}
+                >
                     {exchange.text}
                 </div>
             ))
