@@ -3,10 +3,24 @@ pre {
   padding: 12px;
   border-radius: 8px;
   overflow-x: auto;
-  width: 45vw;
+  width: 60vw;
 }
 
 code {
   font-family: monospace;
   font-weight: 600;
+}
+
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+@media (max-width: 767px) {
+    pre {
+        width: 89vw;
+    }
 }

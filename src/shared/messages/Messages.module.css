@@ -49,7 +49,6 @@
 .aiResponseWrapper { justify-content: flex-start; }
 
 .message {
-  padding: 0.875rem 1.125rem;
   border-radius: 16px;
   word-wrap: break-word;
 }
