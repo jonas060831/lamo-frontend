@@ -50,9 +50,14 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
                 <div
                  key={exchange.id}
                  //add the wrapper base on who is the sender
-                 className={`${styles.exchangeWrapper} ${exchange.sender === 'user' ? styles.userBubble : styles.aiResponseWrapper }`}
+                 className={`${styles.exchangeWrapper} ${exchange.sender === 'user' ? styles.userWrapper : styles.aiResponseWrapper }`}
                 >
-                    {exchange.text}
+                    <div
+                     className={`${styles.message} ${exchange.sender === 'user' ? styles.userMessage : styles.aiMessage}`}
+                    >
+                        {exchange.text}
+
+                    </div>
                 </div>
             ))
             )

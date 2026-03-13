@@ -44,12 +44,21 @@
  }
 }
 
-.userBubble {
-    background-color:var(--dynamic-button-color);
+.userWrapper{ justify-content: flex-end; }
+
+.aiResponseWrapper { justify-content: flex-start; }
+
+.message {
+  padding: 0.875rem 1.125rem;
+  border-radius: 16px;
+  word-wrap: break-word;
+}
+
+.userMessage {
+    background:var(--dynamic-button-color);
     padding: 1rem 1rem;
     margin-right: 0.7rem;
     display: flex;
-    justify-content: end;
     overflow-wrap:break-word;
     word-wrap: break-word;
     text-align: left;
@@ -58,7 +67,11 @@
     border-radius: 20px;
     color: var(--font-color);
     filter: drop-shadow(1px 2px 3px rgba(0, 0, 0, 0.199));
+}
 
+.aiMessge {
+    padding: 0;
+    margin: 0;
 }
 
 /* Desktop Styles */
