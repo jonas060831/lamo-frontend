@@ -54,6 +54,27 @@ export default function Navbar() {
     if(user) getProfile()
 
   }, [user])
+ 
+  // lock scrolling when navbar is open
+  useEffect(() => {
+
+    if(open) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.position = 'fixed'
+      document.body.style.width = '100%'
+    }
+    else {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }
+
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.width = ''
+    }
+  }, [open])
 
   const handleSignIn = () => {
     navigate('/sign-in')
@@ -90,8 +111,8 @@ export default function Navbar() {
               className={styles.backdrop}
               onClick={() => setOpen(false)}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              animate={{ opacity: 1, display: 'block' }}
+              exit={{ opacity: 0, display: 'none' }}
             />
 
             {/* Drawer */}
