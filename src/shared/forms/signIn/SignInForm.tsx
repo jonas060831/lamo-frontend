@@ -34,15 +34,22 @@ const SignInForm = () => {
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     setIsLoading(true)
     event.preventDefault()
-    try {
-      const res = await authService.signIn(formData)
-      setUser(res)
-      navigate('/')
 
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Server Error'
-      setIsLoading(false)
-      setMessage(errorMessage)
+    if(!formData.username || !formData.password) {
+        setMessage('Invalid credentials')
+        setIsLoading(false)
+    }
+    else {
+      try {
+        const res = await authService.signIn(formData)
+        setUser(res)
+        navigate('/')
+
+      } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        setIsLoading(false)
+        setMessage(errorMessage)
+      }
     }
   }
 
@@ -68,7 +75,6 @@ const SignInForm = () => {
             isDisabled={false}
             value={formData.username}
             handleChange={handleChange}
-            required={true}
           />
 
           <TextInput
@@ -78,7 +84,6 @@ const SignInForm = () => {
             isDisabled={false}
             value={formData.password}
             handleChange={handleChange}
-            required={true}
           />
 
           <div>

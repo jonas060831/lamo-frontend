@@ -64,6 +64,7 @@ export default function Navbar() {
     localStorage.removeItem('token')
     setUser(null) 
     setProfile(null)
+    handleDismiss()
   }
 
   return (

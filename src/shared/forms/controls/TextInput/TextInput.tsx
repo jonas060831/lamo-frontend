@@ -8,7 +8,7 @@ type TextInputType = {
   label: string
   value: string
   handleChange: (event: ChangeEvent<HTMLInputElement>) => void
-  required: boolean
+  required?: boolean
 }
 
 const TextInput: FC<TextInputType> = ({
@@ -18,7 +18,7 @@ const TextInput: FC<TextInputType> = ({
   label,
   value,
   handleChange,
-  required
+  required=false
 }) => {
   const [isFocused, setIsFocused] = useState(false)
 
