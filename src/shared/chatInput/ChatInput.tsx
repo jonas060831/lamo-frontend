@@ -1,15 +1,15 @@
 
 import { useState, type FC, type SubmitEvent } from 'react'
-import styles from './ChatBox.module.css'
+import styles from './ChatInput.module.css'
 import CircleButton from '../forms/controls/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
 
-type ChatBoxProps = {
+type ChatInputProps = {
     onResponse: (response: MessageProps) => void
 }
 
-const ChatBox:FC<ChatBoxProps> = ({ onResponse }) => {
+const ChatInput:FC<ChatInputProps> = ({ onResponse }) => {
 
   const [ input, setInput ] = useState<string>('')
   
@@ -75,4 +75,4 @@ const ChatBox:FC<ChatBoxProps> = ({ onResponse }) => {
   )
 }
 
-export default ChatBox
+export default ChatInput

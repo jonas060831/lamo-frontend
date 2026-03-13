@@ -1,7 +1,7 @@
 
 
 import { useState } from 'react'
-import ChatBox from '../../shared/chatbox/ChatBox'
+import ChatInput from '../../shared/chatInput/ChatInput'
 import Messages, { type MessageProps } from '../../shared/messages/Messages'
 import styles from './index.module.css'
 
@@ -23,8 +23,8 @@ const LandingPage = () => {
           <Messages exchange={exchange}/>
         </section>
 
-        <section className={styles.chatContainer}>
-          <ChatBox onResponse={handleChatResponse}/>
+        <section className={styles.chatInputContainer}>
+          <ChatInput onResponse={handleChatResponse}/>
         </section>
 
       </main>
