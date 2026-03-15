@@ -41,7 +41,7 @@ const voiceQuery = async (textQuery: string, sessionId: string) => {
             body: JSON.stringify({ question: textQuery, session_id: sessionId })
         }
 
-        const res = await fetch(`${BASE_URL}/smart-query`, options)
+        const res = await fetch(`${BASE_URL}/voice-query`, options)
 
         const data = await res.json()
 

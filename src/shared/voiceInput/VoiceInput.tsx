@@ -22,13 +22,28 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
     useEffect(() => {
 
         if(!text) return
-        onProcessStatus(true)
+        onProcessStatus(true) //set loading to update button ui
         const processRequest = async () => {
                 try {
+
+                //stop listening on the mic first
+                stopListening()
                 const res = await lamoService.voiceQuery(text, sessionId)
 
-                console.log(res)
-                onProcessStatus(false)
+
+                //testing audio play
+                const audio = new Audio("data:audio/wav;base64," + res.audio)
+                
+                await audio.play()
+
+                audio.onended = () => {
+                    startListening()
+                    onProcessStatus(false)
+                }
+
+                
+
+                
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Server Error'
                 console.log(errorMessage)
@@ -40,8 +55,12 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
     switch (isListening) {
             case false:
                 return <div className={styles.tooltip}>
-                    <CircleButton iconName='mic' iconSize={50} handleClick={startListening}/>
-                    <div className={styles.tooltiptext}> Tap to Speak </div>
+                    <CircleButton iconName={ isLoading ? 'loading' : 'mic' } iconSize={50} handleClick={startListening}/>
+                    
+                    {
+                            isLoading ? null : <div className={styles.tooltiptext}>Tap to Speak</div>
+                    }
+                    
                 </div>
             case true:
                 return <div className={styles.tooltip}>
