@@ -96,7 +96,7 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
   }
 
   return (
-    <div className={styles.container} >
+    <div className={styles.container} style={{ marginLeft: (exchange?.sender === 'ai-voice' || exchange?.sender === 'user-voice') ? '0rem' : '' }}>
         {
             exchanges.length === 0 ? (
                 <div className={styles.emptyState}>
@@ -115,10 +115,12 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
                 <div
                  key={exchange.id}
                  //add the wrapper base on who is the sender
-                 className={`${styles.exchangeWrapper} ${exchange.sender === 'user' ? styles.userWrapper : styles.aiResponseWrapper }`}
+                 //TODO: this causes layer shift because it is fully dependent on the string value of exchange.sender
+                 //will find better solution in the future for now manually check for change.sender value this is temporary fix
+                 className={`${styles.exchangeWrapper} ${(exchange.sender === 'user' || exchange.sender === 'user-voice') ? styles.userWrapper : styles.aiResponseWrapper }`}
                 >
                     <div
-                     className={`${styles.message} ${exchange.sender === 'user' ? styles.userMessage : styles.aiMessage}`}
+                     className={`${styles.message} ${(exchange.sender === 'user' || exchange.sender === 'user-voice') ? styles.userMessage : styles.aiMessage}`}
                     >
 
                         {/* process text for both user and ai */}

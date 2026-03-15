@@ -33,7 +33,7 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         const userQuery: MessageProps = {
         id: uuidv4(),
         text: text,
-        sender: 'user',
+        sender: 'user-voice',
         timestamp: new Date()
     }
         onDiarizationResponse(userQuery)

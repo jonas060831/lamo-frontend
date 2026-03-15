@@ -34,7 +34,7 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
         {
             hasRecognitionSupport ? (
                 <>
-                    <section className={diarizationDisplayClass}>
+                    <section className={diarizationDisplayClass} style={{ height: exchange !== undefined ? '77vh' : '0rem', marginLeft: '0rem'}}>
                             {
                             <Messages
                              exchange={exchange}
