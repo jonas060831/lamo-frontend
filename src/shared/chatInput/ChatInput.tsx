@@ -1,5 +1,5 @@
 
-import { useRef, useState, type FC, type SubmitEvent } from 'react'
+import { useState, type FC, type SubmitEvent } from 'react'
 import styles from './ChatInput.module.css'
 import CircleButton from '../forms/controls/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
@@ -16,8 +16,6 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const [sessionId] = useState(() => `session_${Date.now()}`); // Unique session ID
   
-
-  const inputRef = useRef<HTMLInputElement>(null)
 
   
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
@@ -48,7 +46,6 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
         onResponse(aiResponse)
         onResponseStatus(false)
         setIsLoading(false)
-        focusInput()
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Server Error'
         
@@ -61,14 +58,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
         onResponse(aiResponse)
         onResponseStatus(false)
         setIsLoading(false)
-        focusInput()
     }
-  }
-
-  const focusInput = () => {
-
-    if(!inputRef.current) return
-    inputRef.current.focus()
   }
 
   return (
@@ -79,7 +69,6 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
 
             <input
              name='chatboxTextArea'
-             ref={inputRef}
              onChange={(event) => setInput(event.target.value)}
              placeholder='ask me anything'
              value={input}
