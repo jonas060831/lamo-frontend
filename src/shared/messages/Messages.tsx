@@ -4,6 +4,7 @@ import styles from './Messages.module.css'
 import highLightCodeSection from '../../utils/codeHighlightSupport'
 import hljs from "highlight.js";
 import "highlight.js/styles/atom-one-dark.css";
+import { Link } from 'react-router';
 
 export interface MessageProps {
     id: string
@@ -58,42 +59,67 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
 
   const renderExchangeContent = (text: string) => {
 
-    const parts = text.split(/```([\s\S]*?)```/g);
+  const parts = text.split(/```([\s\S]*?)```/g);
 
-    return parts.map((part, index) => {
+  const urlRegex = /(https?:\/\/[^\s<>()\[\]{}]+[^\s<>().,!?;:'")\]\}])/g;
 
-      // CODE BLOCK
-      if (index % 2 === 1) {
-        return highLightCodeSection(part, index);
+  return parts.map((part, index) => {
+
+    // CODE BLOCK
+    if (index % 2 === 1) {
+      return highLightCodeSection(part, index);
+    }
+
+    // TEXT / HEADERS
+    const segments = part.split(/(\*\*.*?\*\*|!\[.*?\]\(.*?\))/g);
+
+    return segments.map((segment, i) => {
+
+      // HEADER **text**
+      if (segment.startsWith("**") && segment.endsWith("**")) {
+        const headerText = segment.replace(/\*\*/g, "").trim();
+
+        return (
+          <h2 key={`${index}-${i}`} className={styles.messageHeader}>
+            {headerText}
+          </h2>
+        );
       }
 
-      // TEXT / HEADERS 
-      const segments = part.split(/(\*\*.*?\*\*|!\[.*?\]\(.*?\))/g);
+      // NORMAL TEXT WITH URL DETECTION
+      if (segment.trim()) {
 
-      return segments.map((segment, i) => {
+        const pieces = segment.split(urlRegex);
 
-        // HEADER **text**
-        if (segment.startsWith("**") && segment.endsWith("**")) {
-          const headerText = segment.replace(/\*\*/g, "").trim();
-
-          return (
-            <h2 key={`${index}-${i}`} className={styles.messageHeader}>
-              {headerText}
-            </h2>
-          );
-        }
-
-        // NORMAL TEXT
-        return segment.trim() ? (
+        return (
           <p key={`${index}-${i}`} className={styles.messageText}>
-            {segment}
+            {pieces.map((piece, j) => {
+
+              if (urlRegex.test(piece)) {
+                return (
+                  <Link
+                    key={j}
+                    to={piece}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {piece}
+                  </Link>
+                );
+              }
+
+              return piece;
+            })}
           </p>
-        ) : null;
-      });
+        );
+      }
 
-    })
+      return null;
+    });
 
-  }
+  });
+
+};
 
   return (
     <div className={styles.container} style={{ marginLeft: (exchange?.sender === 'ai-voice' || exchange?.sender === 'user-voice') ? '0rem' : '' }}>
