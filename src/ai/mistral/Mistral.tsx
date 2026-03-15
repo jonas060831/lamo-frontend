@@ -1,6 +1,7 @@
 import { useState } from "react"
 import useSpeechRecognition from "../../hooks/useSpeechRecognition"
 import VoiceInput from "../../shared/voiceInput/VoiceInput"
+import Messages, { type MessageProps } from "../../shared/messages/Messages"
 
 type MistralProps = {
     containerClass: string
@@ -18,10 +19,14 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
     hasRecognitionSupport
    } = useSpeechRecognition()
 
+   const [exchange, setExchange] = useState<MessageProps>()
+
    const [isLoading, setIsLoading] = useState<boolean>(false)
   
-  const handleProcessStatus = (isProccesing: boolean) => {
-    setIsLoading(isProccesing)
+  const handleProcessStatus = (isProccesing: boolean) => setIsLoading(isProccesing)
+
+  const handleDiarizationResponse = (response: MessageProps) => {
+    setExchange(response)
   }
 
   return (
@@ -30,7 +35,14 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
             hasRecognitionSupport ? (
                 <>
                     <section className={diarizationDisplayClass}>
-                            {text}
+                            {
+                                <Messages
+                             exchange={exchange}
+                             status={isLoading}
+                             notice={<></>}
+                            />
+                            }
+
                     </section>
 
                     <section className={toggleMistralButtonClass}>
@@ -43,6 +55,7 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
                          isListening={isListening}
                          isLoading={isLoading}
                          onProcessStatus={handleProcessStatus}
+                         onDiarizationResponse={handleDiarizationResponse}
                         />
                     </section>
                 </>

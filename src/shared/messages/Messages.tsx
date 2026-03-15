@@ -8,7 +8,7 @@ import "highlight.js/styles/atom-one-dark.css";
 export interface MessageProps {
     id: string
     text: string
-    sender: 'user' | 'ai' | string //change this to uuid later
+    sender: 'user' | 'ai' | 'ai-voice' | string //change this to uuid later
     timestamp: Date;
     usedContext?: boolean
     
@@ -25,11 +25,19 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
-  const [exchanges, setExchanges] = useState<MessageProps[] | []>([])
+  const [exchanges, setExchanges] = useState<MessageProps[]>([])
 
   useEffect(() => {
     //push new exchange in the state TODO: will save to DB later on
-    if(exchange) setExchanges(prev => [...prev, exchange])
+
+    if(!exchange) return
+
+    if(exchange) {
+      setExchanges(prev => {
+      if (prev.some(msg => msg.id === exchange.id)) return prev
+      return [...prev, exchange]
+  })
+    }
 
   }, [exchange])
 
@@ -90,7 +98,7 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
   return (
     <div className={styles.container} >
         {
-            exchanges.length == 0 ? (
+            exchanges.length === 0 ? (
                 <div className={styles.emptyState}>
                     
                     {
@@ -127,7 +135,12 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
         {
             status && (
                 <div className={styles.statusMessageContainer}>
-                    Generating Response
+                    
+                    {/* if its coming from ai-voice do not show Generating Response message */}
+                    {
+                      exchange?.sender !== 'ai-voice' && 'Generating Response'
+                    }
+
                 </div>
             )
         }
