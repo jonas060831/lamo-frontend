@@ -36,7 +36,7 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
                 <>
                     <section className={diarizationDisplayClass}>
                             {
-                                <Messages
+                            <Messages
                              exchange={exchange}
                              status={isLoading}
                              notice={<></>}

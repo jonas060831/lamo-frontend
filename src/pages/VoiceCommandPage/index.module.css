@@ -20,6 +20,7 @@
 }
 .diarizationContainer {
     background-color: none;
+    overflow-y: scroll;
 }
 .buttonContainer {
     background-color: none;
