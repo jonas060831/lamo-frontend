@@ -1,0 +1,14 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
+    border-radius: 1rem;
+    padding: 1rem;
+    cursor: pointer;
+}
+
+.card:hover {
+    background-color: rgba(0, 0, 0, 0.115);
+    
+}

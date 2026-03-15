@@ -2,11 +2,14 @@
 import type { FC } from 'react'
 import ai from '../../../../../assets/svgs/ai.svg'
 import loading from '../../../../../assets/svgs/loading.svg'
+import voice from '../../../../../assets/svgs/voice.svg'
+import receipt from '../../../../../assets/svgs/receipt.svg'
+import mic from '../../../../../assets/svgs/mic.svg'
 
 import styles from './CircleButton.module.css'
 
-type CircleButtonProps = {
-    iconName: 'ai' | 'loading'
+export type CircleButtonProps = {
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic'
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
     iconSize: number 
     handleClick?: () => void
@@ -18,7 +21,10 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
 
     const iconMap = {
         'ai' : ai,
-        'loading' : loading
+        'loading' : loading,
+        'voice' : voice,
+        'receipt' : receipt,
+        'mic' : mic
     }
 
     const svgSource = iconMap[iconName]

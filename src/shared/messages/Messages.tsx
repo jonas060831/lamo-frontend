@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState, type FC } from 'react'
+import { useEffect, useRef, useState, type FC, type ReactNode } from 'react'
 import styles from './Messages.module.css'
 import highLightCodeSection from '../../utils/codeHighlightSupport'
 import hljs from "highlight.js";
@@ -12,14 +12,16 @@ export interface MessageProps {
     timestamp: Date;
     usedContext?: boolean
     
+    
 }
 
 type ExchangeProps = {
  exchange?: MessageProps | null
  status: boolean | null
+ notice?: ReactNode
 }
 
-const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
+const Messages:FC<ExchangeProps> = ({ exchange=null, status, notice }) => {
 
   const messageEndRef = useRef<HTMLDivElement | null>(null)
 
@@ -90,7 +92,14 @@ const Messages:FC<ExchangeProps> = ({ exchange=null, status }) => {
         {
             exchanges.length == 0 ? (
                 <div className={styles.emptyState}>
-                    <h3>Testing Ollama LLM</h3>
+                    
+                    {
+                      notice ? (
+                        notice
+                      ) : (
+                        <h3>Testing Ollama LLM</h3>
+                      )
+                    }
                 </div>
             )
             : (

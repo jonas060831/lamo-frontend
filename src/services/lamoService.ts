@@ -30,6 +30,30 @@ const smartQuery = async (textQuery: string, sessionId: string) => {
 
 }
 
+const voiceQuery = async (textQuery: string, sessionId: string) => {
+
+    try {
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({ question: textQuery, session_id: sessionId })
+        }
+
+        const res = await fetch(`${BASE_URL}/smart-query`, options)
+
+        const data = await res.json()
+
+        return data
+        
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        return errorMessage
+    }
+}
+
 export {
-    smartQuery
+    smartQuery, //text query
+    voiceQuery //voice query
 }

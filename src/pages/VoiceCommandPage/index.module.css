@@ -1,0 +1,35 @@
+.container {
+    position: relative;
+    height: 87vh;
+    display: flex;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0px 5vw;
+}
+
+.mistralContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.diarizationContainer {
+    background-color: green;
+}
+.buttonContainer {
+    background-color: none;
+}
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+/* @media (max-width: 767px) { } */
