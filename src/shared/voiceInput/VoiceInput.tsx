@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { v4 as uuidv4 } from "uuid"
 import * as lamoService from '../../services/lamoService'
 import { type ListeningState } from "../../hooks/useSpeechRecognition"
-import CircleButton from "../forms/controls/Buttons/CircleButton/CircleButton"
+import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
 import styles from './VoiceInput.module.css'
 import type { MessageProps } from "../messages/Messages"

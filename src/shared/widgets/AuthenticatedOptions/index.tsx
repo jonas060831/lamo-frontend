@@ -1,10 +1,10 @@
 
 
-import CircleButton from '../../forms/controls/Buttons/CircleButton/CircleButton'
+import CircleButton from '../../uis/Buttons/CircleButton/CircleButton'
 
 import styles from './index.module.css'
 
-import type { CircleButtonProps } from '../../forms/controls/Buttons/CircleButton/CircleButton'
+import type { CircleButtonProps } from '../../uis/Buttons/CircleButton/CircleButton'
 import { useNavigate } from 'react-router'
 
 const aiOptions: { iconName: CircleButtonProps['iconName'], text: string, url: string }[] = [

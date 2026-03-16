@@ -4,6 +4,7 @@ const SpeechRecognition =
   (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
 
 export type ListeningState = true | false | "starting"
+ 
 
 const useSpeechRecognition = () => {
 
@@ -45,9 +46,9 @@ const useSpeechRecognition = () => {
         setIsListening(false)
       }
     }
-
-    recognition.onerror = () => {
+    recognition.onerror = async (event: any) => {
       setIsListening(false)
+      console.log(event.error)
       console.log('error here')
     }
 
@@ -75,8 +76,25 @@ const useSpeechRecognition = () => {
         setIsListening(false)
         recognition.stop()
     },1000)
-    
   }
+
+  const requestPermission = () => {
+    const recognition = recognitionRef.current
+    if (!recognition) return
+
+    try {
+      recognition.start()
+
+      // stop immediately after permission is granted
+      setTimeout(() => {
+        recognition.stop()
+      }, 100)
+
+    } catch (err) {
+      console.warn("Permission request failed", err)
+    }
+  }
+
   const resetText = () => {
     setText('')
   }
@@ -87,7 +105,8 @@ const useSpeechRecognition = () => {
     startListening,
     stopListening,
     resetText,
-    hasRecognitionSupport
+    hasRecognitionSupport,  
+    requestPermission,
   }
 }
 

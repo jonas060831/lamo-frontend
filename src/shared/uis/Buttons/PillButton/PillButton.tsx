@@ -1,7 +1,7 @@
 import { type FC } from "react"
 
-import arrowRight from '../../../../../assets/svgs/arrowRight.svg'
-import loading from '../../../../../assets/svgs/loading.svg'
+import arrowRight from '../../../../assets/svgs/arrowRight.svg'
+import loading from '../../../../assets/svgs/loading.svg'
 
 type PillButtonProps = {
     title: string

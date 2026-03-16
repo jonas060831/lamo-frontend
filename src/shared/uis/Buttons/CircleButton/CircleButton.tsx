@@ -1,10 +1,10 @@
 
 import type { FC } from 'react'
-import ai from '../../../../../assets/svgs/ai.svg'
-import loading from '../../../../../assets/svgs/loading.svg'
-import voice from '../../../../../assets/svgs/voice.svg'
-import receipt from '../../../../../assets/svgs/receipt.svg'
-import mic from '../../../../../assets/svgs/mic.svg'
+import ai from '../../../../assets/svgs/ai.svg'
+import loading from '../../../../assets/svgs/loading.svg'
+import voice from '../../../../assets/svgs/voice.svg'
+import receipt from '../../../../assets/svgs/receipt.svg'
+import mic from '../../../../assets/svgs/mic.svg'
 
 import styles from './CircleButton.module.css'
 

@@ -1,7 +1,7 @@
 
 import { useState, type FC, type SubmitEvent } from 'react'
 import styles from './ChatInput.module.css'
-import CircleButton from '../forms/controls/Buttons/CircleButton/CircleButton'
+import CircleButton from '../uis/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
 

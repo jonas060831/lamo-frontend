@@ -11,9 +11,9 @@ import useTheme from "../../hooks/useTheme";
 import { useAuth, type IUser } from "../../contexts/UserContext";
 
 import * as authService from '../../services/authService'
-import PillButton from "../forms/controls/Buttons/PillButton/PillButton";
+import PillButton from "../uis/Buttons/PillButton/PillButton";
 import { useNavigate } from "react-router";
-import LinkButton from "../forms/controls/Buttons/LinkButton/LinkButton";
+import LinkButton from "../uis/Buttons/LinkButton/LinkButton";
 
 
 

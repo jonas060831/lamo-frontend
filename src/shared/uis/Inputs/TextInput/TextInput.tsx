@@ -1,5 +1,5 @@
 import { useState, type ChangeEvent, type FC } from 'react'
-import styles from '../controls.module.css'
+import styles from './TextInput.module.css'
 
 import eyeOpen from '../../../../assets/svgs/eyeOpen.svg'
 import eyeClose from '../../../../assets/svgs/eyeClose.svg'

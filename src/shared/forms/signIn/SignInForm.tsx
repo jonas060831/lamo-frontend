@@ -1,12 +1,12 @@
 import { useState, type ChangeEvent, type SubmitEvent } from 'react'
 import styles from './SignInForm.module.css'
-import TextInput from '../controls/TextInput/TextInput'
+import TextInput from '../../uis/Inputs/TextInput/TextInput'
 
 import * as authService from '../../../services/authService'
 import { useAuth } from '../../../contexts/UserContext'
 
 import { useNavigate, Navigate } from 'react-router'
-import PillButton from '../controls/Buttons/PillButton/PillButton'
+import PillButton from '../../uis/Buttons/PillButton/PillButton'
 
 export type basicAuthType = {
   username: string
