@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { v4 as uuidv4 } from "uuid"
 import * as lamoService from '../../services/lamoService'
 import { type ListeningState } from "../../hooks/useSpeechRecognition"
@@ -6,6 +6,8 @@ import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
 import type { MessageProps } from "../messages/Messages"
 import Tooltip from "../uis/informational/Tooltip/Tooltip"
+import { Dock } from "../uis/navigational/Dock/Dock"
+import { useNavigate } from "react-router"
 
 type VoiceInputProps = {
     text: string
@@ -21,6 +23,10 @@ type VoiceInputProps = {
 const VoiceInput = ({text, sessionId, startListening, stopListening, isListening, isLoading, onProcessStatus, onDiarizationResponse }:VoiceInputProps) => {
 
     const lastTextRef = useRef("")
+
+    const navigate = useNavigate()
+
+    const [highlightedIndex, setHighlightedIndex] = useState(1);
 
     useEffect(() => {
 
@@ -71,11 +77,37 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         processRequest()
     }, [text])
 
+
+    const aiSelection = [
+        {
+            label: "Chat AI",
+            component: (
+            <CircleButton
+                iconName="ai"
+                iconSize={20}
+                handleClick={() => navigate("/")}
+            />
+            ),
+        },
+        {
+            label: isLoading ? undefined : "Tap to Speak",
+            component: (
+            <CircleButton
+                iconName={isLoading ? "loading" : "mic"}
+                iconSize={20}
+                handleClick={startListening}
+            />
+            ),
+        },
+        {
+            label: "Receipts AI",
+            component: <CircleButton iconName="receipt" iconSize={20} />,
+        },
+    ];
+
     switch (isListening) {
             case false:
-                return <Tooltip text={isLoading ? null : 'Tap to Speak'}>
-                    <CircleButton iconName={ isLoading ? 'loading' : 'mic' } iconSize={50} handleClick={startListening}/>
-                </Tooltip>
+                return <Dock highlightedIndex={highlightedIndex} items={aiSelection} setHighlightedIndex={setHighlightedIndex}/>
             case true:
                 return <Tooltip text={isLoading ? 'Thinking...' : 'Listening...'}>
                     <CircleButton
