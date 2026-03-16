@@ -5,6 +5,8 @@ import CircleButton from '../uis/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
 import Popover from '../uis/informational/Popover/Popover'
+import PillButton from '../uis/Buttons/PillButton/PillButton'
+import { useNavigate } from 'react-router'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void
@@ -16,6 +18,8 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const [sessionId] = useState(() => `session_${Date.now()}`); // Unique session ID
+  
+  const navigate = useNavigate()
   
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -92,11 +96,11 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
                  }
                 >
                     <div>
-                     <button>Voice</button>
-                      <hr />
-                     <button>Costco Receipt</button>
+                     <PillButton iconName='voice' title='Voice' justifyContent='flex-start' handleClick={() => navigate('/voice')} variant='translucent' />
                      <hr />
-                     <button>...</button>   
+                     <PillButton iconName='receipt' title='Costco' justifyContent='flex-start' variant='translucent'/>
+                     <hr />
+                     <PillButton iconName='horizontalEllipses' title='More' justifyContent='flex-start' variant='translucent'/>
                     </div>
                 </Popover>
             </div>

@@ -2,24 +2,31 @@ import { type FC } from "react"
 
 import arrowRight from '../../../../assets/svgs/arrowRight.svg'
 import loading from '../../../../assets/svgs/loading.svg'
+import voice from '../../../../assets/svgs/voice.svg'
+import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
+import receipt from '../../../../assets/svgs/receipt.svg'
 
 type PillButtonProps = {
     title: string
-    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
-    iconName?: 'arrowRight' | 'loading'
+    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt'
+    justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
 
 import styles from './PillButton.module.css'
 
-const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='loading', handleClick  }) => {
+const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='loading', justifyContent='center', handleClick  }) => {
 
   
   const renderIcon = () => {
 
     const iconMap = {
         'arrowRight' : arrowRight,
-        'loading' : loading
+        'loading' : loading,
+        'voice' : voice,
+        'horizontalEllipses' : horizontalEllipses,
+        'receipt' : receipt
     }
 
     const svgSource = iconMap[iconName]
@@ -37,6 +44,7 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
     <button 
      className={`${styles.button} ${styles[variant]}`}
      onClick={handleClick}
+     style={{ justifyContent: justifyContent }}
     >
         {renderIcon()}
         {title}
