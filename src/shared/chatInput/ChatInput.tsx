@@ -4,7 +4,7 @@ import styles from './ChatInput.module.css'
 import CircleButton from '../uis/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
-import Tooltip from '../uis/informational/tooltip/Tooltip'
+import Popover from '../uis/navigational/Popover/Popover'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void
@@ -16,8 +16,6 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const [sessionId] = useState(() => `session_${Date.now()}`); // Unique session ID
-  
-
   
   const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -62,6 +60,10 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
     }
   }
 
+  const handlePopoverMenu = () => {
+
+  }
+
   return (
     <div
      className={styles.container}
@@ -77,13 +79,26 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
              />
             
             <div className={styles.moreContainer}>
-                <Tooltip text="show more">
+                
+                <Popover
+                 direction='top-left'
+                 trigger={
                     <CircleButton
                      variant='link'
                      iconName='chevronUp'
                      iconSize={20}
+                     handleClick={handlePopoverMenu}
                     />
-                </Tooltip>
+                 }
+                >
+                    <div>
+                     <button>Voice</button>
+                      <hr />
+                     <button>Costco Receipt</button>
+                     <hr />
+                     <button>...</button>   
+                    </div>
+                </Popover>
             </div>
 
             <div className={styles.sendContainer}>

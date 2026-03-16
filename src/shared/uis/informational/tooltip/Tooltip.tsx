@@ -5,16 +5,20 @@ import styles from './Tooltip.module.css'
 
 
 type TooltipProps = {
-    text: string | null
+    text?: string | null
     children: ReactNode
+    component?: ReactNode  
 }
-const Tooltip = ({text, children}: TooltipProps) => {
+const Tooltip = ({text, children, component}: TooltipProps) => {
   return (
     <div
      className={styles.tooltip}
     >
         {children}
-        <div className={styles.tooltiptext}>{text}</div>
+        <div className={styles.tooltiptext}>
+          {text}
+          {component}
+        </div>
     </div>
   )
 }
