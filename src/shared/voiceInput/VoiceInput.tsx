@@ -4,8 +4,8 @@ import * as lamoService from '../../services/lamoService'
 import { type ListeningState } from "../../hooks/useSpeechRecognition"
 import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
-import styles from './VoiceInput.module.css'
 import type { MessageProps } from "../messages/Messages"
+import Tooltip from "../uis/informational/tooltip/Tooltip"
 
 type VoiceInputProps = {
     text: string
@@ -73,28 +73,17 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
 
     switch (isListening) {
             case false:
-                return <div className={styles.tooltip}>
+                return <Tooltip text={isLoading ? null : 'Tap to Speak'}>
                     <CircleButton iconName={ isLoading ? 'loading' : 'mic' } iconSize={50} handleClick={startListening}/>
-                    
-                    {
-                            isLoading ? null : <div className={styles.tooltiptext}>Tap to Speak</div>
-                    }
-                    
-                </div>
+                </Tooltip>
             case true:
-                return <div className={styles.tooltip}>
+                return <Tooltip text={isLoading ? 'Thinking...' : 'Listening...'}>
                     <CircleButton
-                    iconName={isLoading ? 'loading' : 'voice'}
-                    iconSize={50}
-                    handleClick={stopListening}
+                     iconName={isLoading ? 'loading' : 'voice'}
+                     iconSize={50}
+                     handleClick={stopListening}
                     />
-                    
-                    <div className={styles.tooltiptext}>
-                        {
-                            isLoading ? 'Thinking...' : 'Listening...'
-                        }
-                    </div>
-                </div>
+                </Tooltip>
             default:
                 return <CircleButton iconName='loading' iconSize={50} />
 
