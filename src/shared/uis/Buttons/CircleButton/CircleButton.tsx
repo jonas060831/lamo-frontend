@@ -14,10 +14,11 @@ export type CircleButtonProps = {
     iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp'
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
     iconSize: number
+    type?: 'button' | 'submit'
     handleClick?: () => void
 }
 
-const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSize, handleClick }) => {
+const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSize, type='button',handleClick }) => {
 
   const renderIcon = () => {
 
@@ -45,6 +46,7 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
   return (
     <button 
      className={`${styles.button} ${styles[variant]}`}
+     type={type}
      disabled={iconName == 'loading' ? true : false}
      onClick={handleClick}
     >

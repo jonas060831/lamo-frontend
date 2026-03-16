@@ -5,9 +5,9 @@ import { type ListeningState } from "../../hooks/useSpeechRecognition"
 import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
 import type { MessageProps } from "../messages/Messages"
-import Tooltip from "../uis/informational/Tooltip/Tooltip"
 import { Dock } from "../uis/navigational/Dock/Dock"
 import { useNavigate } from "react-router"
+import Tooltip from "../uis/informational/tooltip/Tooltip"
 
 type VoiceInputProps = {
     text: string
