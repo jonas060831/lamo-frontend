@@ -7,6 +7,7 @@ import * as lamoService from '../../services/lamoService'
 import Popover from '../uis/informational/Popover/Popover'
 import PillButton from '../uis/Buttons/PillButton/PillButton'
 import { useNavigate } from 'react-router'
+import { useAuth } from '../../contexts/UserContext'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void
@@ -18,6 +19,8 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
   const [ input, setInput ] = useState<string>('')
   const [ isLoading, setIsLoading ] = useState<boolean>(false)
   const [sessionId] = useState(() => `session_${Date.now()}`); // Unique session ID
+
+  const {user} = useAuth()
   
   const navigate = useNavigate()
   
@@ -95,13 +98,25 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
                     />
                  }
                 >
-                    <div>
-                     <PillButton iconName='voice' title='Voice' justifyContent='flex-start' handleClick={() => navigate('/voice')} variant='translucent' />
-                     <hr />
-                     <PillButton iconName='receipt' title='Costco' justifyContent='flex-start' variant='translucent'/>
-                     <hr />
-                     <PillButton iconName='horizontalEllipses' title='More' justifyContent='flex-start' variant='translucent'/>
-                    </div>
+                    {
+                        user ? (
+                            <div>
+                                <PillButton iconName='voice' title='Voice' justifyContent='flex-start' handleClick={() => navigate('/voice')} variant='translucent' />
+                                <hr />
+                                <PillButton iconName='receipt' title='Costco' justifyContent='flex-start' variant='translucent'/>
+                                <hr />
+                                <PillButton iconName='horizontalEllipses' title='More' justifyContent='flex-start' variant='translucent'/>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.2rem' }}>
+                                <PillButton iconName='arrowRight' title='Sign In' handleClick={() => navigate('/sign-in')}/>
+                                or
+                                <PillButton iconName='userAdd' title='Sign Up' />
+                                <hr style={{ width: '100%'}}/>
+                                <p style={{ opacity: '0.7', fontSize: '11px' }}>to use all our services</p>
+                            </div>
+                        )
+                    }
                 </Popover>
             </div>
 

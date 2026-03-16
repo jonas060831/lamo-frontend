@@ -5,11 +5,12 @@ import loading from '../../../../assets/svgs/loading.svg'
 import voice from '../../../../assets/svgs/voice.svg'
 import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
 import receipt from '../../../../assets/svgs/receipt.svg'
+import userAdd from '../../../../assets/svgs/userAdd.svg'
 
 type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
@@ -26,7 +27,8 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
         'loading' : loading,
         'voice' : voice,
         'horizontalEllipses' : horizontalEllipses,
-        'receipt' : receipt
+        'receipt' : receipt,
+        'userAdd' : userAdd
     }
 
     const svgSource = iconMap[iconName]
