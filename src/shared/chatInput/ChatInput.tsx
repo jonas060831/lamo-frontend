@@ -4,7 +4,7 @@ import styles from './ChatInput.module.css'
 import CircleButton from '../uis/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
-import Popover from '../uis/navigational/Popover/Popover'
+import Popover from '../uis/informational/Popover/Popover'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void

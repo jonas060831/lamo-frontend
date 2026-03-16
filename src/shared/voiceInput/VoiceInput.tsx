@@ -5,7 +5,7 @@ import { type ListeningState } from "../../hooks/useSpeechRecognition"
 import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
 import type { MessageProps } from "../messages/Messages"
-import Tooltip from "../uis/informational/tooltip/Tooltip"
+import Tooltip from "../uis/informational/Tooltip/Tooltip"
 
 type VoiceInputProps = {
     text: string
