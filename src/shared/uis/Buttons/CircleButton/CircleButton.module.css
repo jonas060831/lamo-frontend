@@ -18,3 +18,7 @@
 .dynamic {
     background-color: var(--dynamic-button-color);
 }
+
+.link {
+    background-color: var(--bg);
+}

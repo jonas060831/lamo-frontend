@@ -4,6 +4,7 @@ import styles from './ChatInput.module.css'
 import CircleButton from '../uis/Buttons/CircleButton/CircleButton'
 import type { MessageProps } from '../messages/Messages'
 import * as lamoService from '../../services/lamoService'
+import Tooltip from '../uis/informational/tooltip/Tooltip'
 
 type ChatInputProps = {
     onResponse: (response: MessageProps) => void
@@ -74,11 +75,21 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
              value={input}
              autoComplete='off'
              />
+            
+            <div className={styles.moreContainer}>
+                <Tooltip text="show more">
+                    <CircleButton
+                     variant='link'
+                     iconName='chevronUp'
+                     iconSize={20}
+                    />
+                </Tooltip>
+            </div>
 
-
-            <div className={styles.buttonContainer}>
+            <div className={styles.sendContainer}>
                 <CircleButton iconName={isLoading ? 'loading' : 'ai'} iconSize={30}/>
             </div>
+
         </form>
     </div>
   )

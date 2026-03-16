@@ -13,9 +13,18 @@
     resize: none;
     padding: 1rem;
     right: 5vw;
+    padding-left: 55px;
+    padding-right: 55px;
+    font-size: 18px;
 }
 
-.buttonContainer {
+.moreContainer {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+}
+
+.sendContainer {
     position: absolute;
     top: 4px;
     right: 4px;
@@ -29,12 +38,20 @@
 
 /* Phone Styles */
 @media (max-width: 767px) {
-    .buttonContainer {
+    .moreContainer {
+        position: absolute;
+        top: 8x;
+        left: 8px;
+    }
+    .moreContainer > button > img {
+        width: 34px;
+    }
+    .sendContainer {
      position: absolute;
      top: 2px;
      right: 2px;
     }
-    .buttonContainer > button > img {
+    .sendContainer > button > img {
         width: 34px;
     }
 }

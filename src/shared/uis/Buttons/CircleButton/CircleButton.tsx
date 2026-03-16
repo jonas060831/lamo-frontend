@@ -5,13 +5,15 @@ import loading from '../../../../assets/svgs/loading.svg'
 import voice from '../../../../assets/svgs/voice.svg'
 import receipt from '../../../../assets/svgs/receipt.svg'
 import mic from '../../../../assets/svgs/mic.svg'
+import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
+import chevronUp from '../../../../assets/svgs/chevronUp.svg'
 
 import styles from './CircleButton.module.css'
 
 export type CircleButtonProps = {
-    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic'
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp'
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
-    iconSize: number 
+    iconSize: number
     handleClick?: () => void
 }
 
@@ -24,7 +26,9 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
         'loading' : loading,
         'voice' : voice,
         'receipt' : receipt,
-        'mic' : mic
+        'mic' : mic,
+        'horizontalEllipses' : horizontalEllipses,
+        'chevronUp' : chevronUp
     }
 
     const svgSource = iconMap[iconName]
