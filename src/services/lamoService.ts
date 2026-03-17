@@ -53,7 +53,28 @@ const voiceQuery = async (textQuery: string, sessionId: string) => {
     }
 }
 
+const processText = async (text: string, num_reasons: number =3, session_id?: string) => {
+    try {
+        const options = {
+            method: 'POST',
+            headers: { 'Content-Type' : 'application/json' },
+            body: JSON.stringify({ text, num_reasons, session_id })
+        }
+        const res = await fetch(`${BASE_URL}/detect-ai`, options)
+
+        const data = res.json()
+
+        return data
+
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        return errorMessage
+    }
+}
+
 export {
     smartQuery, //text query
-    voiceQuery //voice query
+    voiceQuery, //voice query
+    processText
 }

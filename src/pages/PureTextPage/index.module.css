@@ -1,0 +1,16 @@
+.container {
+    position: relative;
+    height: 87vh;
+    display: flex;
+    gap: 1rem;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 5vw;
+}
+
+.topContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

@@ -1,13 +1,70 @@
+import { useState, type ChangeEvent } from 'react'
+import CircleButton from '../../shared/uis/Buttons/CircleButton/CircleButton'
+import styles from './index.module.css'
 
+import * as lamoService from '../../services/lamoService'
+import TextArea from '../../shared/uis/Inputs/TextArea/TextArea'
+import TextFindingView from '../../shared/widgets/TextFindingView/TextFindingView'
+
+
+export type FindingType = {
+ ai_probability: number,
+ confidence: number,
+ signals: string []
+}
 const PureTextPage = () => {
 
+  const [text, setText] = useState<string>('')
+  const [findings, setFindings] = useState<FindingType | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    event.preventDefault()
+    
+    const value = event.target.value
+
+    setText(value)
+  }
+
+  const handleProcessText = async () => {
+    setIsLoading(true)
+    try {
+      
+      const data = await lamoService.processText(text)
+
+      setFindings(data)
+
+      setIsLoading(false)
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Server Error'
+      console.log(errorMessage)
+    }
+  }
 
   return (
-    <div>
-        <div>text area</div>
-        <div>action area</div>
-        <div>findings</div>
-    </div>
+    <main className={styles.container}>
+
+        <div className={styles.topContainer}>
+          <div className={styles.textInputCheck}>
+            <TextArea
+             name='textToProcess'
+             id='1'
+             value={text}
+             handleChange={handleChange}
+             placeholder="Paste your text here to check for AI generation"
+            />
+          </div>
+          <div className={styles.widgetContainer}>
+              <TextFindingView findings={findings}/>
+          </div>
+          
+        </div>
+        <div className={styles.actionContainer}>
+          <CircleButton iconName={isLoading ? 'loading' : 'crosshair'} iconSize={20} handleClick={handleProcessText}/>
+        </div>
+    </main>
   )
 }
 
