@@ -6,11 +6,12 @@ import voice from '../../../../assets/svgs/voice.svg'
 import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
 import receipt from '../../../../assets/svgs/receipt.svg'
 import userAdd from '../../../../assets/svgs/userAdd.svg'
+import crosshair from '../../../../assets/svgs/crosshair.svg'
 
 type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
@@ -28,7 +29,8 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
         'voice' : voice,
         'horizontalEllipses' : horizontalEllipses,
         'receipt' : receipt,
-        'userAdd' : userAdd
+        'userAdd' : userAdd,
+        'crosshair' : crosshair
     }
 
     const svgSource = iconMap[iconName]

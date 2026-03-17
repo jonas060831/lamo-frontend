@@ -1,6 +1,7 @@
 import { useAuth } from "./contexts/UserContext"
 import DashboardPage from "./pages/Dashboard"
 import LandingPage from "./pages/LandingPage"
+import PureTextPage from "./pages/PureTextPage"
 import VoiceCommandPage from "./pages/VoiceCommandPage"
 import SignInForm from "./shared/forms/signIn/SignInForm"
 import Navbar from "./shared/navbar/Navbar"
@@ -20,6 +21,7 @@ const  App = ()  => {
           user && (
             <>
               <Route path="/voice" element={ <VoiceCommandPage /> } />
+              <Route path="/pure-text" element={ <PureTextPage /> } />
             </>
           )
         }

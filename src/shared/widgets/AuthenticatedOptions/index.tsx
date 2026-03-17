@@ -14,10 +14,16 @@ const aiOptions: { iconName: CircleButtonProps['iconName'], text: string, url: s
         url: '/voice'
     },
     {
+        iconName: 'crosshair',
+        text: 'Text Authenticity Analyzer',
+        url: '/pure-text'
+    },
+    {
         iconName: 'receipt',
         text: 'Track Your Costco Receipt',
         url: '/costco-receipt'
     }
+
 ]
 
 
