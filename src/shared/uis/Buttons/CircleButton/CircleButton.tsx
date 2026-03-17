@@ -1,5 +1,5 @@
 
-import type { FC } from 'react'
+import { type FC, type ReactNode } from 'react'
 import ai from '../../../../assets/svgs/ai.svg'
 import loading from '../../../../assets/svgs/loading.svg'
 import voice from '../../../../assets/svgs/voice.svg'
@@ -11,14 +11,15 @@ import chevronUp from '../../../../assets/svgs/chevronUp.svg'
 import styles from './CircleButton.module.css'
 
 export type CircleButtonProps = {
-    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp'
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars'
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
     iconSize: number
     type?: 'button' | 'submit'
+    element?: ReactNode
     handleClick?: () => void
 }
 
-const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSize, type='button',handleClick }) => {
+const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSize, type='button', element, handleClick }) => {
 
   const renderIcon = () => {
 
@@ -32,16 +33,30 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
         'chevronUp' : chevronUp
     }
 
-    const svgSource = iconMap[iconName]
+    const svgSource = iconName === 'animatingVoiceBars' ? null :iconMap[iconName]
     return (
         <img
          className='svg'
-         src={svgSource}
+         src={svgSource!}
          width={`${iconSize}px`}
          height='auto'
         />
     )
   }
+
+
+  if(iconName === 'animatingVoiceBars') {
+      return (
+        <button 
+          className={`${styles.button} ${styles[variant]}`}
+          type={type}
+          disabled={false}
+          onClick={handleClick}
+          >
+              {element}
+          </button>
+        )
+    }
 
   return (
     <button 

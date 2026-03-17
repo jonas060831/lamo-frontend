@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "dotenv-cli": "^11.0.0",
     "framer-motion": "^12.35.2",
     "highlight.js": "^11.11.1",
     "modern-normalize": "^3.0.1",

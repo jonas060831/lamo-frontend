@@ -7,7 +7,8 @@ import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 import type { MessageProps } from "../messages/Messages"
 import { Dock } from "../uis/navigational/Dock/Dock"
 import { useNavigate } from "react-router"
-import Tooltip from "../uis/informational/tooltip/Tooltip"
+import Tooltip from "../uis/informational/Tooltip/Tooltip"
+import VoiceBars from "../uis/informational/VoiceBars/VoiceBars"
 
 type VoiceInputProps = {
     text: string
@@ -27,6 +28,10 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
     const navigate = useNavigate()
 
     const [highlightedIndex, setHighlightedIndex] = useState(1);
+    const [isSpeaking, setIsSpeaking] = useState(false)
+    const [_, setAudioBase64] = useState("")
+    const analyserRef = useRef<AnalyserNode | null>(null)
+    const audioCtxRef = useRef<AudioContext | null>(null)
 
     useEffect(() => {
 
@@ -55,20 +60,45 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                 const aiAnswer: MessageProps = {
                     id: uuidv4(),
                     text: res.answer || res.error || 'I could not process your request.',
+                    audioString: res.audio,
                     sender: 'ai-voice',
-                    timestamp: new Date()
+                    timestamp: new Date(),
+                    usedContext: res.used_context,
+                    usedWebSearch: res.used_web_search
                 } 
                 onDiarizationResponse(aiAnswer)
+                
+                setAudioBase64(res.audio) //create base64 to be use for animating the voice svg file
+
 
                 //testing audio play
                 const audio = new Audio("data:audio/wav;base64," + res.audio)
-                
+
+                // Set up analyser BEFORE playing
+                const ctx = new AudioContext()
+                const analyser = ctx.createAnalyser()
+                analyser.fftSize = 64
+                const source = ctx.createMediaElementSource(audio)
+                source.connect(analyser)
+                analyser.connect(ctx.destination)
+
+                audioCtxRef.current = ctx
+                analyserRef.current = analyser
+
+                audio.onplay = () => {
+                    ctx.resume()
+                    setIsSpeaking(true)
+                }
                 audio.onended = () => {
+                    setIsSpeaking(false)
                     startListening()
                     onProcessStatus(false)
+                    ctx.close()
                 }
-                await audio.play() //play the string audio/wav
-                
+
+                setAudioBase64(res.audio) // still used to trigger VoiceBars mount
+                await audio.play()
+
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Server Error'
                 console.log(errorMessage)
@@ -80,7 +110,7 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
 
     const aiSelection = [
         {
-            label: "Chat AI",
+            label: "Chat",
             component: (
             <CircleButton
                 iconName="ai"
@@ -90,20 +120,30 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
             ),
         },
         {
-            label: isLoading ? undefined : "Tap to Speak",
+            // label: isLoading ? undefined : "Tap to Speak",
+            label: isSpeaking ? 'Speaking...' : isLoading ? undefined : "Tap to Speak",
             component: (
-            <CircleButton
-                iconName={isLoading ? "loading" : "mic"}
-                iconSize={20}
-                handleClick={startListening}
-            />
+            isSpeaking ? (
+                <CircleButton
+                 iconName='animatingVoiceBars'
+                 iconSize={20}
+                 element={<VoiceBars analyser={analyserRef.current} width={25} height={25} />}
+                />
+            ) : (
+                <CircleButton
+                 iconName={isLoading ? "loading" : "mic"}
+                 iconSize={20}
+                 handleClick={startListening}
+                />
+            )
             ),
         },
         {
-            label: "Receipts AI",
+            label: "Receipts",
             component: <CircleButton iconName="receipt" iconSize={20} />,
         },
     ];
+
 
     switch (isListening) {
             case false:
@@ -111,9 +151,9 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
             case true:
                 return <Tooltip text={isLoading ? 'Thinking...' : 'Listening...'}>
                     <CircleButton
-                     iconName={isLoading ? 'loading' : 'voice'}
-                     iconSize={50}
-                     handleClick={stopListening}
+                    iconName={isLoading ? 'loading' : 'voice'}
+                    iconSize={50}
+                    handleClick={stopListening}
                     />
                 </Tooltip>
             default:

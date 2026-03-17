@@ -9,9 +9,11 @@ import { Link } from 'react-router';
 export interface MessageProps {
     id: string
     text: string
+    audioString?: string
     sender: 'user' | 'ai' | 'ai-voice' | string //change this to uuid later
-    timestamp: Date;
+    timestamp: Date
     usedContext?: boolean
+    usedWebSearch?: boolean
     
     
 }

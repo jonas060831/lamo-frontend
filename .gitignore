@@ -26,3 +26,7 @@ dist-ssr
 
 #environment variables
 .env
+.env.production
+
+#production files
+production
