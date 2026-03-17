@@ -139,6 +139,10 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
             ),
         },
         {
+            label: "Pure Text",
+            component: <CircleButton iconName="crosshair" iconSize={20} handleClick={() => navigate('pure-text')}/>,
+        },
+        {
             label: "Receipts",
             component: <CircleButton iconName="receipt" iconSize={20} />,
         },

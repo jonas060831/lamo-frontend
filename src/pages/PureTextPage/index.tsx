@@ -1,8 +1,12 @@
 
 const PureTextPage = () => {
+
+
   return (
     <div>
-        index
+        <div>text area</div>
+        <div>action area</div>
+        <div>findings</div>
     </div>
   )
 }
