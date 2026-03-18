@@ -28,14 +28,21 @@ const PureTextPage = () => {
   }
 
   const handleProcessText = async () => {
+
+    if(text.trim() === '') return
+
     setIsLoading(true)
     try {
       
       const data = await lamoService.processText(text)
 
+      if(data.error) {
+        alert(data.error)
+        setIsLoading(false)
+      }
+      else {
       setFindings(data)
-
-      setIsLoading(false)
+      setIsLoading(false)}
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Server Error'
@@ -47,6 +54,7 @@ const PureTextPage = () => {
     <main className={styles.container}>
 
         <div className={styles.topContainer}>
+          
           <div className={styles.textInputCheck}>
             <TextArea
              name='textToProcess'
@@ -55,14 +63,18 @@ const PureTextPage = () => {
              handleChange={handleChange}
              placeholder="Paste your text here to check for AI generation"
             />
+            
+            <div className={styles.buttonContainer}>
+              <CircleButton iconName={isLoading ? 'loading' : 'crosshair'} iconSize={20} handleClick={handleProcessText}/>
+            </div>
           </div>
           <div className={styles.widgetContainer}>
-              <TextFindingView findings={findings}/>
+              <TextFindingView findings={findings} text={text} />
           </div>
           
         </div>
         <div className={styles.actionContainer}>
-          <CircleButton iconName={isLoading ? 'loading' : 'crosshair'} iconSize={20} handleClick={handleProcessText}/>
+          {/* other actions will go here */}
         </div>
     </main>
   )

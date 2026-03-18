@@ -1,5 +1,5 @@
 
-import Llama3 from '../../ai/llama3/Llama3'
+import Llama3 from '../../ai/llama3/Llama3Chat'
 import AuthenticatedOptions from '../../shared/widgets/AuthenticatedOptions'
 
 import styles from './index.module.css'

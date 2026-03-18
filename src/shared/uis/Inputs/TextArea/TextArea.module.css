@@ -11,4 +11,19 @@
     padding: 1rem 1rem;
     color: var(--font-color);
     outline: none;
+    font-size: larger;
+}
+
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+@media (max-width: 767px) {
+    .container {
+     width: 90vw;
+    }
 }

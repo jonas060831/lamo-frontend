@@ -2,14 +2,14 @@ import { useState, type FC, type ReactNode } from 'react'
 import Messages, { type MessageProps } from '../../shared/messages/Messages'
 import ChatInput from '../../shared/chatInput/ChatInput'
 
-type Llama3Props  = {
+type Llama3ChatProps  = {
     containerClass? : string
     messageDisplayClass?: string
     chatInputClass? : string
     heroNotice?: ReactNode
 }
 
-const Llama3:FC<Llama3Props> = ({ containerClass, messageDisplayClass, chatInputClass, heroNotice }:Llama3Props) => {
+const Llama3Chat:FC<Llama3ChatProps> = ({ containerClass, messageDisplayClass, chatInputClass, heroNotice }:Llama3ChatProps) => {
   const [exchange, setExchange] = useState<MessageProps>()
   
   const [responseStatus, setResponseStatus] = useState<boolean | null>(null)
@@ -42,4 +42,4 @@ const Llama3:FC<Llama3Props> = ({ containerClass, messageDisplayClass, chatInput
 
 }
 
-export default Llama3
+export default Llama3Chat
