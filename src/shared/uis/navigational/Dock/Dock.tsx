@@ -1,5 +1,7 @@
-import { type FC, type ReactNode } from "react";
+import { useEffect, type FC, type ReactNode } from "react";
 import styles from "./Dock.module.css";
+import { useLocation } from "react-router";
+
 
 interface DockItem {
   label?: string;
@@ -35,6 +37,8 @@ export const Dock: FC<DockProps> = ({
     return 0.5;
   };
 
+  const { pathname } = useLocation()
+
   return (
     <div className={styles.dock}>
       {items.map((item, index) => (
@@ -48,7 +52,7 @@ export const Dock: FC<DockProps> = ({
             transition: "transform 0.2s ease-out, filter 0.2s ease-out, opacity 0.2s ease-out",
           }}
           onMouseEnter={() => setHighlightedIndex(index)}
-          onMouseLeave={() => setHighlightedIndex(1)}
+          onMouseLeave={() => pathname == '/voice' ?  setHighlightedIndex(1) : highlightedIndex }  //fix for navigation for now 
         >
           {item.component}
 
