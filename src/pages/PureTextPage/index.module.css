@@ -10,25 +10,28 @@
 
 .topContainer {
     display: flex;
+    gap: 1rem;
+}
+
+.formContainer {
+    display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
 
-.textInputCheck {
+.formContainer form {
     position: relative;
 }
 
-.buttonContainer {
+.formContainer button {
     position: absolute;
-    right: 5px;
+    right: 7px;
     bottom: 10px;
 }
 
 
-.actionContainer {
+.bottomContainer {
     display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 
