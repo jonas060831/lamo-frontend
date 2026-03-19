@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type ReactNode } from "react"
+import { useState, type ChangeEvent, type ReactNode, type SubmitEvent } from "react"
 import CircleButton from "../../shared/uis/Buttons/CircleButton/CircleButton"
 import TextArea from "../../shared/uis/Inputs/TextArea/TextArea"
 
@@ -50,8 +50,9 @@ const Llama3PureText = ({containerClass, topContainerClass, formContainerClass, 
       setText(value)
     }
   
-    const handleProcessText = async () => {
-  
+    const handleProcessText = async (event: SubmitEvent<HTMLFormElement> ) => {
+      event.preventDefault()
+
       if(text.trim() === '') return
   
       setIsLoading(true)
@@ -82,7 +83,7 @@ const Llama3PureText = ({containerClass, topContainerClass, formContainerClass, 
             {/* text area and button */}
             <section className={formContainerClass}> 
                 
-                <form>
+                <form onSubmit={handleProcessText}>
                     <TextArea
                     name='textToProcess'
                     id='1'
@@ -94,7 +95,6 @@ const Llama3PureText = ({containerClass, topContainerClass, formContainerClass, 
                     <CircleButton 
                     iconName={isLoading ? 'loading' : 'crosshair'}
                     iconSize={20}
-                    handleClick={handleProcessText}
                     type='submit'
                     />
                 </form>

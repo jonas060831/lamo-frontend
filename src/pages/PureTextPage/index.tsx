@@ -58,7 +58,7 @@ const PureTextPage = () => {
           {/* other actions to modify result */}
       </Llama3PureText>
       
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '-2rem' }}>
         <Dock highlightedIndex={highlightedIndex} items={aiSelection} setHighlightedIndex={setHighlightedIndex}/>
       </div>
     </>

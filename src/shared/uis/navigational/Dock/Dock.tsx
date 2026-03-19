@@ -1,4 +1,4 @@
-import { useEffect, type FC, type ReactNode } from "react";
+import { type FC, type ReactNode } from "react";
 import styles from "./Dock.module.css";
 import { useLocation } from "react-router";
 
