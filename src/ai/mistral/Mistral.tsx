@@ -2,7 +2,7 @@ import { useState } from "react"
 import useSpeechRecognition from "../../hooks/useSpeechRecognition"
 import VoiceInput from "../../shared/voiceInput/VoiceInput"
 import Messages, { type MessageProps } from "../../shared/messages/Messages"
-import useVoiceRecorder from "../../hooks/useVoiceRecorder"
+// import useVoiceRecorder from "../../hooks/useVoiceRecorder"
 
 type MistralProps = {
     containerClass: string
