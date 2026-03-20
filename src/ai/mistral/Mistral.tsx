@@ -2,6 +2,7 @@ import { useState } from "react"
 import useSpeechRecognition from "../../hooks/useSpeechRecognition"
 import VoiceInput from "../../shared/voiceInput/VoiceInput"
 import Messages, { type MessageProps } from "../../shared/messages/Messages"
+import useVoiceRecorder from "../../hooks/useVoiceRecorder"
 
 type MistralProps = {
     containerClass: string
@@ -19,22 +20,27 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
     hasRecognitionSupport
    } = useSpeechRecognition()
 
+//    const { text, startListening, stopListening, isListening, hasRecognitionSupport } = useVoiceRecorder()
+
    const [exchange, setExchange] = useState<MessageProps>()
 
    const [isLoading, setIsLoading] = useState<boolean>(false)
   
-  const handleProcessStatus = (isProccesing: boolean) => setIsLoading(isProccesing)
+   const handleProcessStatus = (isProccesing: boolean) => setIsLoading(isProccesing)
 
-  const handleDiarizationResponse = (response: MessageProps) => {
+   const handleDiarizationResponse = (response: MessageProps) => {
     setExchange(response)
-  }
+   }
 
   return (
     <main className={containerClass}>
         {
             hasRecognitionSupport ? (
                 <>
-                    <section className={diarizationDisplayClass} style={{ height: exchange !== undefined ? '77vh' : '0rem', marginLeft: '0rem'}}>
+                    <section
+                     className={diarizationDisplayClass}
+                     style={{ height: exchange !== undefined ? '77vh' : '0rem', marginLeft: '0rem'}}
+                    >
                             {
                             <Messages
                              exchange={exchange}

@@ -107,7 +107,6 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         processRequest()
     }, [text])
 
-
     const aiSelection = [
         {
             label: "Chat",
