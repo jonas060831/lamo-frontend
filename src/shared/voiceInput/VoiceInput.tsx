@@ -33,6 +33,10 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
     const analyserRef = useRef<AnalyserNode | null>(null)
     const audioCtxRef = useRef<AudioContext | null>(null)
 
+    const audioRef = useRef<HTMLAudioElement | null>(null)
+    const isUnlockedRef = useRef(false)
+
+
     useEffect(() => {
 
         if (!text || text === lastTextRef.current) return
@@ -71,19 +75,30 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                 setAudioBase64(res.audio) //create base64 to be use for animating the voice svg file
 
 
-                //testing audio play
-                const audio = new Audio("data:audio/wav;base64," + res.audio)
+                let audio = audioRef.current
 
-                // Set up analyser BEFORE playing
-                const ctx = new AudioContext()
-                const analyser = ctx.createAnalyser()
+                if (!audio) {
+                audio = new Audio()
+                audioRef.current = audio
+                }
+
+                audio.src = "data:audio/wav;base64," + res.audio
+
+                let ctx = audioCtxRef.current
+                let analyser = analyserRef.current
+
+                if (!ctx || !analyser) {
+                ctx = new AudioContext()
+                analyser = ctx.createAnalyser()
                 analyser.fftSize = 64
+
                 const source = ctx.createMediaElementSource(audio)
                 source.connect(analyser)
                 analyser.connect(ctx.destination)
 
                 audioCtxRef.current = ctx
                 analyserRef.current = analyser
+                }
 
                 audio.onplay = () => {
                     ctx.resume()
@@ -93,11 +108,17 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                     setIsSpeaking(false)
                     startListening()
                     onProcessStatus(false)
-                    ctx.close()
                 }
 
                 setAudioBase64(res.audio) // still used to trigger VoiceBars mount
-                await audio.play()
+
+                if (audioCtxRef.current?.state === "suspended") {
+                  await audioCtxRef.current.resume()
+                }
+
+                await audio.play().catch(err => {
+                    console.log("Playback failed:", err)
+                })
 
             } catch (error) {
                 const errorMessage = error instanceof Error ? error.message : 'Server Error'
@@ -106,6 +127,27 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         }
         processRequest()
     }, [text])
+
+    const unlockAudioIfNeeded = async () => {
+        if (isUnlockedRef.current) return
+
+        try {
+            const audio = new Audio()
+            audio.src =
+            "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQAAAAA="
+
+            await audio.play()
+            audio.pause()
+
+            audioRef.current = audio
+            isUnlockedRef.current = true
+
+            console.log("🔓 Audio unlocked")
+        } catch (e) {
+            console.log("❌ Unlock failed", e)
+        }
+    }
+
 
     const aiSelection = [
         {
@@ -132,7 +174,10 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                 <CircleButton
                  iconName={isLoading ? "loading" : "mic"}
                  iconSize={20}
-                 handleClick={startListening}
+                 handleClick={async () => {
+                    await unlockAudioIfNeeded()
+                    startListening()
+                 }}
                 />
             )
             ),
