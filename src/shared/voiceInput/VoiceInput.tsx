@@ -31,6 +31,11 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
     
     useEffect(() => {
         if (!text || text === lastTextRef.current) return
+
+        if(isSpeaking) {
+            console.log('audio is playing skipping processRequest while that happens')
+            return
+        }
         
         lastTextRef.current = text
         
@@ -103,7 +108,7 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         }
     }
         processRequest()
-    }, [text])
+    }, [text, isSpeaking])
     
     const aiSelection = [
         { 
