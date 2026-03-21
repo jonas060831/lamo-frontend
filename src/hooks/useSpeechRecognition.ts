@@ -47,9 +47,9 @@ const useSpeechRecognition = () => {
       }
     }
     recognition.onerror = async (event: any) => {
+
+      console.log("Speech Error:", event.error)
       setIsListening(false)
-      console.log(event.error)
-      console.log('error here')
     }
 
   }, [])

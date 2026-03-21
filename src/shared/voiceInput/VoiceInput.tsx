@@ -133,6 +133,7 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                 handleClick={async () => {
                     try {
                         await navigator.mediaDevices.getUserMedia({ audio: true })
+                        startListening()
                     } catch (error) {
                         console.log('Mic permission denied:', error)
                         onProcessStatus(false)
