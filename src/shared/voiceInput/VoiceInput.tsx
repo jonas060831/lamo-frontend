@@ -130,7 +130,14 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
                 <CircleButton
                 iconName={isLoading ? "loading" : "mic"}
                 iconSize={20}
-                handleClick={startListening}
+                handleClick={async () => {
+                    try {
+                        await navigator.mediaDevices.getUserMedia({ audio: true })
+                    } catch (error) {
+                        console.log('Mic permission denied:', error)
+                        onProcessStatus(false)
+                    }
+                }}
                 />
                 )
             ),
