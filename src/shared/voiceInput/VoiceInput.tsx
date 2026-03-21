@@ -35,69 +35,73 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
         lastTextRef.current = text
         
         onProcessStatus(true)
+        stopListening()
         
         //set loading to update button ui //
         // lift state to parent to update message display(from user)
         const userQuery: MessageProps = {
             id: uuidv4(),
             text: text, sender: 'user-voice',
-            timestamp: new Date() }
-            onDiarizationResponse(userQuery)
-            const processRequest = async () => {
-                 try {
-                 //stop listening on the mic first stopListening()
-                 const res = await lamoService.voiceQuery(text, sessionId)
-                 
-                 //lift state to parent to update message display(from ai)
-                 const aiAnswer: MessageProps = {
-                    id: uuidv4(),
-                    text: res.answer || res.error || 'I could not process your request.',
-                    audioString: res.audio, sender: 'ai-voice',
-                    timestamp: new Date(),
-                    usedContext: res.used_context, usedWebSearch: res.used_web_search
-                 }
-                 
-                 onDiarizationResponse(aiAnswer)
-                 setAudioBase64(res.audio)
-                 
-                 //create base64 to be use for animating the voice svg file
-                 //testing audio play
-                 const audio = new Audio("data:audio/wav;base64," + res.audio)
-                 
-                 // Set up analyser BEFORE playing
-                 const ctx = new AudioContext()
-                 const analyser = ctx.createAnalyser()
-                 
-                 analyser.fftSize = 64
-                 
-                 const source = ctx.createMediaElementSource(audio)
-                 
-                 source.connect(analyser)
-                 analyser.connect(ctx.destination)
-                 
-                 audioCtxRef.current = ctx
-                 analyserRef.current = analyser
-                 audio.onplay = () => {
-                    ctx.resume()
-                    setIsSpeaking(true)
+            timestamp: new Date()
+        }
+        
+        onDiarizationResponse(userQuery)
+
+        const processRequest = async () => {
+                try {
+                //stop listening on the mic first stopListening()
+                const res = await lamoService.voiceQuery(text, sessionId)
+                
+                //lift state to parent to update message display(from ai)
+                const aiAnswer: MessageProps = {
+                id: uuidv4(),
+                text: res.answer || res.error || 'I could not process your request.',
+                audioString: res.audio, sender: 'ai-voice',
+                timestamp: new Date(),
+                usedContext: res.used_context, usedWebSearch: res.used_web_search
                 }
                 
-                audio.onended = () => {
-                    setIsSpeaking(false)
-                    startListening()
-                    onProcessStatus(false)
-                    ctx.close() 
-                }
-                
+                onDiarizationResponse(aiAnswer)
                 setAudioBase64(res.audio)
                 
-                // still used to trigger VoiceBars mount
-                await audio.play()
-            } catch (error) {
-                const errorMessage = error instanceof Error ? error.message : 'Server Error'
-                console.log(errorMessage)
+                //create base64 to be use for animating the voice svg file
+                //testing audio play
+                const audio = new Audio("data:audio/wav;base64," + res.audio)
+                
+                // Set up analyser BEFORE playing
+                const ctx = new AudioContext()
+                const analyser = ctx.createAnalyser()
+                
+                analyser.fftSize = 64
+                
+                const source = ctx.createMediaElementSource(audio)
+                
+                source.connect(analyser)
+                analyser.connect(ctx.destination)
+                
+                audioCtxRef.current = ctx
+                analyserRef.current = analyser
+                audio.onplay = () => {
+                ctx.resume()
+                setIsSpeaking(true)
             }
+            
+            audio.onended = () => {
+                setIsSpeaking(false)
+                startListening()
+                onProcessStatus(false)
+                ctx.close() 
+            }
+            
+            setAudioBase64(res.audio)
+            
+            // still used to trigger VoiceBars mount
+            await audio.play()
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Server Error'
+            console.log(errorMessage)
         }
+    }
         processRequest()
     }, [text])
     
