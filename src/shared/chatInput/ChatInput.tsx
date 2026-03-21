@@ -123,7 +123,11 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
             </div>
 
             <div className={styles.sendContainer}>
-                <CircleButton iconName={isLoading ? 'loading' : 'ai'} iconSize={30}/>
+                <CircleButton
+                 iconName={isLoading ? 'loading' : 'ai'}
+                 iconSize={30}
+                 type='submit'
+                />
             </div>
 
         </form>
