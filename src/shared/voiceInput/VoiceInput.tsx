@@ -40,6 +40,8 @@ const VoiceInput = ({
   const analyserRef = useRef<AnalyserNode | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
 
+  const [_, setAnalyserReady] = useState(false)
+
   const isProcessingRef = useRef(false)
   const ignoreUntilRef = useRef(0)
 
@@ -91,9 +93,13 @@ const VoiceInput = ({
         audioCtxRef.current = ctx
         analyserRef.current = analyser
 
+        setAnalyserReady(prev => !prev)
+
         const estimatedDuration = (res.audio.length / 16000) * 1000
 
         let ended = false
+
+        
 
         const cleanup = () => {
           if (ended) return
@@ -114,7 +120,10 @@ const VoiceInput = ({
 
         audio.onplay = () => {
           ctx.resume()
-          setIsSpeaking(true)
+          
+          setTimeout(() => {
+            setIsSpeaking(true)
+          }, 50)
         }
 
         audio.onended = cleanup
@@ -213,7 +222,7 @@ const VoiceInput = ({
             ? "Thinking..."
             : "Listening..."
         }>
-          {isSpeaking ? (
+          {isSpeaking && analyserRef.current ? (
             <CircleButton
               iconName="animatingVoiceBars"
               iconSize={50}
