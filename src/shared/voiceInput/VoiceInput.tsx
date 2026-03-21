@@ -161,6 +161,10 @@ const VoiceInput = ({text, sessionId, startListening, stopListening, isListening
             />,
         },
     ];
+
+    useEffect(() => {
+        console.log(isListening)
+    }, [isListening])
     
     switch (isListening) {
         case false:
