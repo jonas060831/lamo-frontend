@@ -20,6 +20,12 @@ type VoiceInputProps = {
   onDiarizationResponse: (response: MessageProps) => void
 }
 
+// A short silent WAV played synchronously on tap to unlock Safari's audio gate.
+// Safari requires Audio.play() in the same synchronous call stack as the gesture.
+// Once unlocked this way, all subsequent playback through the same AudioContext
+// is permitted — even after async gaps like API calls.
+const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
+
 const VoiceInput = ({
   text,
   sessionId,
@@ -44,6 +50,22 @@ const VoiceInput = ({
 
   const isProcessingRef = useRef(false)
   const ignoreUntilRef = useRef(0)
+
+  // Must be called synchronously inside the tap handler, before any await.
+  // Safari invalidates the gesture token the moment execution hits an await,
+  // so audio unlocking must be the very first thing that runs on tap.
+  const unlockAudio = () => {
+    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
+      audioCtxRef.current = new AudioContext()
+    }
+    audioCtxRef.current.resume()
+
+    // Safari also checks the Audio element itself — play a silent clip now
+    // so this element's playback is gesture-activated before any async work.
+    const silent = new Audio(SILENT_WAV)
+    silent.volume = 0
+    silent.play().catch(() => {/* ignore */})
+  }
 
   useEffect(() => {
     if (!text || text === lastTextRef.current) return
@@ -80,9 +102,19 @@ const VoiceInput = ({
 
         onDiarizationResponse(aiAnswer)
 
+        // Fresh Audio element every turn — createMediaElementSource permanently
+        // binds an element and throws InvalidStateError if called again on it.
         const audio = new Audio("data:audio/wav;base64," + res.audio)
 
-        const ctx = new AudioContext()
+        // Reuse the already-unlocked AudioContext from the tap.
+        // Since it was resumed synchronously during the gesture, Safari allows
+        // playback through it even after async gaps.
+        if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
+          audioCtxRef.current = new AudioContext()
+        }
+        const ctx = audioCtxRef.current
+        await ctx.resume()
+
         const analyser = ctx.createAnalyser()
         analyser.fftSize = 64
 
@@ -99,8 +131,6 @@ const VoiceInput = ({
 
         let ended = false
 
-        
-
         const cleanup = () => {
           if (ended) return
           ended = true
@@ -111,16 +141,13 @@ const VoiceInput = ({
           isProcessingRef.current = false
           onProcessStatus(false)
 
-          try {
-            ctx.close()
-          } catch(error) {
-            console.log('err on cleanup', error)
-          }
+          // Do NOT close ctx — closing it revokes the unlock and would require
+          // another user gesture to resume audio on the next turn.
         }
 
         audio.onplay = () => {
           ctx.resume()
-          
+
           setTimeout(() => {
             setIsSpeaking(true)
           }, 50)
@@ -128,7 +155,7 @@ const VoiceInput = ({
 
         audio.onended = cleanup
 
-        // iOS fallback
+        // iOS fallback in case onended doesn't fire
         setTimeout(cleanup, estimatedDuration + 500)
 
         await audio.play().catch(err => {
@@ -160,20 +187,26 @@ const VoiceInput = ({
         <CircleButton
           iconName={isLoading ? "loading" : "mic"}
           iconSize={20}
-          handleClick={async () => {
-            try {
-              await navigator.mediaDevices.getUserMedia({
-                audio: {
-                  echoCancellation: true,
-                  noiseSuppression: true,
-                  autoGainControl: true
-                }
+          handleClick={() => {
+            // Unlock audio SYNCHRONOUSLY before any await — this must be the
+            // very first thing called. Safari drops the gesture token on the
+            // first await, so getUserMedia must come after, not before.
+            unlockAudio()
+
+            navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true
+              }
+            })
+              .then(() => {
+                startListening()
               })
-              startListening()
-            } catch (error) {
-              console.log('Mic permission denied:', error)
-              onProcessStatus(false)
-            }
+              .catch((error) => {
+                console.log('Mic permission denied:', error)
+                onProcessStatus(false)
+              })
           }}
         />
       )
