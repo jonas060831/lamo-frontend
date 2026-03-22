@@ -20,15 +20,8 @@ type VoiceInputProps = {
   onDiarizationResponse: (response: MessageProps) => void
 }
 
-// A short silent WAV played synchronously on tap to unlock Safari's audio gate.
-// Safari requires Audio.play() in the same synchronous call stack as the gesture.
-// Once unlocked this way, all subsequent playback through the same AudioContext
-// is permitted — even after async gaps like API calls.
 const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
 
-// Safari (iOS + macOS) routes AudioContext output through the ear speaker and
-// blocks createMediaElementSource after async gaps. Skip Web Audio on Safari —
-// a plain Audio element uses the correct speaker route and just works.
 const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
 const VoiceInput = ({
@@ -51,25 +44,34 @@ const VoiceInput = ({
   const analyserRef = useRef<AnalyserNode | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
 
+  // On Safari, this Audio element is created + .play()'d synchronously during
+  // the tap gesture. When the real audio arrives we pause it, swap the src,
+  // and play again — Safari allows this because the element itself was
+  // gesture-activated. A new Audio() created later (outside a gesture) would be blocked.
+  const safariAudioRef = useRef<HTMLAudioElement | null>(null)
+
   const [_, setAnalyserReady] = useState(false)
 
   const isProcessingRef = useRef(false)
   const ignoreUntilRef = useRef(0)
 
-  // Must be called synchronously inside the tap handler, before any await.
-  // Safari invalidates the gesture token the moment execution hits an await,
-  // so audio unlocking must be the very first thing that runs on tap.
   const unlockAudio = () => {
-    if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
-      audioCtxRef.current = new AudioContext()
+    if (!isSafari) {
+      // Chrome/Firefox: unlock AudioContext
+      if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
+        audioCtxRef.current = new AudioContext()
+      }
+      audioCtxRef.current.resume()
+      return
     }
-    audioCtxRef.current.resume()
 
-    // Safari also checks the Audio element itself — play a silent clip now
-    // so this element's playback is gesture-activated before any async work.
-    const silent = new Audio(SILENT_WAV)
-    silent.volume = 0
-    silent.play().catch(() => {/* ignore */})
+    // Safari: create the Audio element we'll reuse for real playback,
+    // and call .play() on it NOW while still inside the gesture.
+    // Safari permanently gesture-activates this specific element instance.
+    const audio = new Audio(SILENT_WAV)
+    audio.volume = 0
+    safariAudioRef.current = audio
+    audio.play().catch(() => {/* ignore — element is now gesture-unlocked */})
   }
 
   useEffect(() => {
@@ -107,42 +109,33 @@ const VoiceInput = ({
 
         onDiarizationResponse(aiAnswer)
 
-        // Fresh Audio element every turn — createMediaElementSource permanently
-        // binds an element and throws InvalidStateError if called again on it.
-        const audio = new Audio("data:audio/wav;base64," + res.audio)
-
         const estimatedDuration = (res.audio.length / 16000) * 1000
-
         let ended = false
 
         const cleanup = () => {
           if (ended) return
           ended = true
-
           setIsSpeaking(false)
-
           ignoreUntilRef.current = Date.now() + 800
           isProcessingRef.current = false
           onProcessStatus(false)
-
-          // Do NOT close ctx — closing it revokes the unlock and would require
-          // another user gesture to resume audio on the next turn.
         }
 
-        audio.onended = cleanup
-
-        // iOS fallback in case onended doesn't fire
         setTimeout(cleanup, estimatedDuration + 500)
 
         if (isSafari) {
-          // Safari: plain Audio element only — no Web Audio graph.
-          // createMediaElementSource routes audio through the ear speaker on iOS,
-          // and breaks playback on macOS Safari after async gaps.
-          audio.onplay = () => {
-            setTimeout(() => {
-              setIsSpeaking(true)
-            }, 50)
-          }
+          // Reuse the gesture-unlocked Audio element from the tap.
+          // Pause it (it was playing a silent clip), swap in the real src,
+          // then play. Safari allows this because the element was activated
+          // during the tap — it does NOT check gestures on subsequent .play() calls
+          // on the same already-unlocked element.
+          const audio = safariAudioRef.current ?? new Audio()
+          audio.pause()
+          audio.volume = 1
+          audio.src = "data:audio/wav;base64," + res.audio
+
+          audio.onplay = () => setTimeout(() => setIsSpeaking(true), 50)
+          audio.onended = cleanup
 
           await audio.play().catch(err => {
             console.log("Playback failed:", err)
@@ -150,10 +143,9 @@ const VoiceInput = ({
           })
 
         } else {
-          // Chrome / Firefox: wire through Web Audio for VoiceBars visualizer.
-          // Reuse the already-unlocked AudioContext from the tap.
-          // Since it was resumed synchronously during the gesture, Chrome allows
-          // playback through it even after async gaps.
+          // Chrome / Firefox: fresh Audio element + Web Audio graph for VoiceBars
+          const audio = new Audio("data:audio/wav;base64," + res.audio)
+
           if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
             audioCtxRef.current = new AudioContext()
           }
@@ -169,16 +161,13 @@ const VoiceInput = ({
 
           audioCtxRef.current = ctx
           analyserRef.current = analyser
-
           setAnalyserReady(prev => !prev)
 
           audio.onplay = () => {
             ctx.resume()
-
-            setTimeout(() => {
-              setIsSpeaking(true)
-            }, 50)
+            setTimeout(() => setIsSpeaking(true), 50)
           }
+          audio.onended = cleanup
 
           await audio.play().catch(err => {
             console.log("Playback failed:", err)
@@ -211,9 +200,6 @@ const VoiceInput = ({
           iconName={isLoading ? "loading" : "mic"}
           iconSize={20}
           handleClick={() => {
-            // Unlock audio SYNCHRONOUSLY before any await — this must be the
-            // very first thing called. Safari drops the gesture token on the
-            // first await, so getUserMedia must come after, not before.
             unlockAudio()
 
             navigator.mediaDevices.getUserMedia({
@@ -223,9 +209,7 @@ const VoiceInput = ({
                 autoGainControl: true
               }
             })
-              .then(() => {
-                startListening()
-              })
+              .then(() => startListening())
               .catch((error) => {
                 console.log('Mic permission denied:', error)
                 onProcessStatus(false)
@@ -305,4 +289,4 @@ const VoiceInput = ({
   }
 }
 
-export default VoiceInput
+export default VoiceInput 
