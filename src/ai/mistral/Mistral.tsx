@@ -2,15 +2,15 @@ import { useState } from "react"
 import useSpeechRecognition from "../../hooks/useSpeechRecognition"
 import VoiceInput from "../../shared/voiceInput/VoiceInput"
 import Messages, { type MessageProps } from "../../shared/messages/Messages"
-import { v4 as uuidv4 } from "uuid"
 // import useVoiceRecorder from "../../hooks/useVoiceRecorder"
 
 type MistralProps = {
     containerClass: string
     diarizationDisplayClass: string
     toggleMistralButtonClass: string
+    sessionId: string
 }
-const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonClass }: MistralProps) => {
+const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonClass, sessionId }: MistralProps) => {
 
   const {
     text,
@@ -56,7 +56,7 @@ const Mistral = ({ containerClass, diarizationDisplayClass, toggleMistralButtonC
                         {/* process each voice input */}
                         <VoiceInput
                          text={text}
-                         sessionId={uuidv4()}
+                         sessionId={sessionId}
                          startListening={startListening}
                          stopListening={stopListening}
                          isListening={isListening}
