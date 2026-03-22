@@ -26,6 +26,11 @@ type VoiceInputProps = {
 // is permitted — even after async gaps like API calls.
 const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
 
+// Safari (iOS + macOS) routes AudioContext output through the ear speaker and
+// blocks createMediaElementSource after async gaps. Skip Web Audio on Safari —
+// a plain Audio element uses the correct speaker route and just works.
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+
 const VoiceInput = ({
   text,
   sessionId,
@@ -106,27 +111,6 @@ const VoiceInput = ({
         // binds an element and throws InvalidStateError if called again on it.
         const audio = new Audio("data:audio/wav;base64," + res.audio)
 
-        // Reuse the already-unlocked AudioContext from the tap.
-        // Since it was resumed synchronously during the gesture, Safari allows
-        // playback through it even after async gaps.
-        if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
-          audioCtxRef.current = new AudioContext()
-        }
-        const ctx = audioCtxRef.current
-        await ctx.resume()
-
-        const analyser = ctx.createAnalyser()
-        analyser.fftSize = 64
-
-        const source = ctx.createMediaElementSource(audio)
-        source.connect(analyser)
-        analyser.connect(ctx.destination)
-
-        audioCtxRef.current = ctx
-        analyserRef.current = analyser
-
-        setAnalyserReady(prev => !prev)
-
         const estimatedDuration = (res.audio.length / 16000) * 1000
 
         let ended = false
@@ -145,23 +129,62 @@ const VoiceInput = ({
           // another user gesture to resume audio on the next turn.
         }
 
-        audio.onplay = () => {
-          ctx.resume()
-
-          setTimeout(() => {
-            setIsSpeaking(true)
-          }, 50)
-        }
-
         audio.onended = cleanup
 
         // iOS fallback in case onended doesn't fire
         setTimeout(cleanup, estimatedDuration + 500)
 
-        await audio.play().catch(err => {
-          console.log("Playback failed:", err)
-          cleanup()
-        })
+        if (isSafari) {
+          // Safari: plain Audio element only — no Web Audio graph.
+          // createMediaElementSource routes audio through the ear speaker on iOS,
+          // and breaks playback on macOS Safari after async gaps.
+          audio.onplay = () => {
+            setTimeout(() => {
+              setIsSpeaking(true)
+            }, 50)
+          }
+
+          await audio.play().catch(err => {
+            console.log("Playback failed:", err)
+            cleanup()
+          })
+
+        } else {
+          // Chrome / Firefox: wire through Web Audio for VoiceBars visualizer.
+          // Reuse the already-unlocked AudioContext from the tap.
+          // Since it was resumed synchronously during the gesture, Chrome allows
+          // playback through it even after async gaps.
+          if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
+            audioCtxRef.current = new AudioContext()
+          }
+          const ctx = audioCtxRef.current
+          await ctx.resume()
+
+          const analyser = ctx.createAnalyser()
+          analyser.fftSize = 64
+
+          const source = ctx.createMediaElementSource(audio)
+          source.connect(analyser)
+          analyser.connect(ctx.destination)
+
+          audioCtxRef.current = ctx
+          analyserRef.current = analyser
+
+          setAnalyserReady(prev => !prev)
+
+          audio.onplay = () => {
+            ctx.resume()
+
+            setTimeout(() => {
+              setIsSpeaking(true)
+            }, 50)
+          }
+
+          await audio.play().catch(err => {
+            console.log("Playback failed:", err)
+            cleanup()
+          })
+        }
 
       } catch (err) {
         console.log(err)
@@ -255,7 +278,7 @@ const VoiceInput = ({
             ? "Thinking..."
             : "Listening..."
         }>
-          {isSpeaking && analyserRef.current ? (
+          {isSpeaking && analyserRef.current && !isSafari ? (
             <CircleButton
               iconName="animatingVoiceBars"
               iconSize={50}
