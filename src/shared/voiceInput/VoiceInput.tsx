@@ -135,7 +135,7 @@ const VoiceInput = ({
           // on the same already-unlocked element.
           const audio = mobileOrTableAudioRef.current ?? new Audio()
           audio.pause()
-          audio.volume = 3
+          audio.volume = 1
           audio.src = "data:audio/wav;base64," + res.audio
 
           audio.onplay = () => setTimeout(() => setIsSpeaking(true), 50)
