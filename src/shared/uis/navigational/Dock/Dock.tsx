@@ -1,6 +1,7 @@
 import { type FC, type ReactNode } from "react";
 import styles from "./Dock.module.css";
 import { useLocation } from "react-router";
+import { getDeviceInfo } from "../../../../utils/regex/deviceCheck";
 
 
 interface DockItem {
@@ -19,6 +20,8 @@ export const Dock: FC<DockProps> = ({
   highlightedIndex,
   setHighlightedIndex,
 }) => {
+
+  const { isMobileOrTablet } = getDeviceInfo()
   const maxScale = 1.8;
   const step = 0.3;
 
@@ -29,7 +32,7 @@ export const Dock: FC<DockProps> = ({
 
   const getBlur = (index: number) => {
     if (index === highlightedIndex) return "blur(0px)";
-    return "blur(2px)";
+    return isMobileOrTablet ? "" : "blur(2px)";
   };
 
   const getOpacity = (index: number) => {
