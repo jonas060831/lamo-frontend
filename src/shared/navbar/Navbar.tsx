@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import styles from "./Navbar.module.css";
 
 import Menu from '../../assets/svgs/menu.svg'
-import arrowRight from '../../assets/svgs/arrowRight.svg'
 import lightIcon from '../../assets/svgs/sun.svg'
 import darkIcon from '../../assets/svgs/moon.svg'
 
@@ -127,15 +126,14 @@ export default function Navbar() {
                 damping: 25
               }}
             >
-              <button
-                className={styles.arrowRight}
-                onClick={() => setOpen(false)}
-              >
-                <img 
-                 className={`svg ${styles.arrowRightImg}`}
-                 src={arrowRight}
-                />
-              </button>
+
+              <div className={styles.arrowRight}>
+                  <LinkButton
+                    title=""
+                    iconName="arrowRight"
+                    handleClick={() => setOpen(false)}
+                  />
+              </div>
 
               <ul className={styles.links}>
                 <li>

@@ -11,14 +11,14 @@ import crosshair from '../../../../assets/svgs/crosshair.svg'
 type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'none'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
 
 import styles from './PillButton.module.css'
 
-const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='loading', justifyContent='center', handleClick  }) => {
+const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='none', justifyContent='center', handleClick  }) => {
 
   
   const renderIcon = () => {
@@ -30,7 +30,8 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='lo
         'horizontalEllipses' : horizontalEllipses,
         'receipt' : receipt,
         'userAdd' : userAdd,
-        'crosshair' : crosshair
+        'crosshair' : crosshair,
+        'none': undefined
     }
 
     const svgSource = iconMap[iconName]

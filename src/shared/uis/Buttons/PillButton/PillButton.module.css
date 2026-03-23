@@ -44,6 +44,10 @@
     background-color: rgba(0, 0, 0, 0.127);
 }
 
+.danger {
+    background-color: red;
+}
+
 
 /* Dark theme */
 html[data-theme="dark"] {
