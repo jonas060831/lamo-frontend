@@ -40,7 +40,7 @@ const VoiceInput = ({
 
   const lastTextRef = useRef("")
   const navigate = useNavigate()
-  const { isMobileOrTablet } = getDeviceInfo()
+  const { isSafari, isMobileOrTablet } = getDeviceInfo()
 
   const [highlightedIndex, setHighlightedIndex] = useState(1)
   const [isSpeaking, setIsSpeaking] = useState(false)
@@ -60,7 +60,7 @@ const VoiceInput = ({
   const ignoreUntilRef = useRef(0)
 
   const unlockAudio = () => {
-    if (!isMobileOrTablet) {
+    if (!isSafari) {
       // Chrome/Firefox: unlock AudioContext
       if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
         audioCtxRef.current = new AudioContext()
