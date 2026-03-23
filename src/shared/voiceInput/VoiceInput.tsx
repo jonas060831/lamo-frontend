@@ -8,6 +8,7 @@ import { Dock } from "../uis/navigational/Dock/Dock"
 import { useNavigate } from "react-router"
 import Tooltip from "../uis/informational/Tooltip/Tooltip"
 import VoiceBars from "../uis/informational/VoiceBars/VoiceBars"
+import { getDeviceInfo } from "../../utils/regex/deviceCheck"
 
 type VoiceInputProps = {
   text: string
@@ -23,6 +24,7 @@ type VoiceInputProps = {
 const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
 
 
+
 const VoiceInput = ({
   text,
   sessionId,
@@ -34,8 +36,11 @@ const VoiceInput = ({
   onDiarizationResponse
 }: VoiceInputProps) => {
 
+
+
   const lastTextRef = useRef("")
   const navigate = useNavigate()
+  const { isMobileOrTablet } = getDeviceInfo()
 
   const [highlightedIndex, setHighlightedIndex] = useState(1)
   const [isSpeaking, setIsSpeaking] = useState(false)
@@ -47,7 +52,7 @@ const VoiceInput = ({
   // the tap gesture. When the real audio arrives we pause it, swap the src,
   // and play again — Safari allows this because the element itself was
   // gesture-activated. A new Audio() created later (outside a gesture) would be blocked.
-  const safariAudioRef = useRef<HTMLAudioElement | null>(null)
+  const mobileOrTableAudioRef = useRef<HTMLAudioElement | null>(null)
 
   const [_, setAnalyserReady] = useState(false)
 
@@ -55,12 +60,21 @@ const VoiceInput = ({
   const ignoreUntilRef = useRef(0)
 
   const unlockAudio = () => {
+    if (!isMobileOrTablet) {
+      // Chrome/Firefox: unlock AudioContext
+      if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
+        audioCtxRef.current = new AudioContext()
+      }
+      audioCtxRef.current.resume()
+      return
+    }
+
     // Safari: create the Audio element we'll reuse for real playback,
     // and call .play() on it NOW while still inside the gesture.
     // Safari permanently gesture-activates this specific element instance.
     const audio = new Audio(SILENT_WAV)
     audio.volume = 0
-    safariAudioRef.current = audio
+    mobileOrTableAudioRef.current = audio
     audio.play().catch(() => {/* ignore — element is now gesture-unlocked */})
   }
 
@@ -113,7 +127,26 @@ const VoiceInput = ({
 
         setTimeout(cleanup, estimatedDuration + 500)
 
-        
+        if (isMobileOrTablet) {
+          // Reuse the gesture-unlocked Audio element from the tap.
+          // Pause it (it was playing a silent clip), swap in the real src,
+          // then play. Safari allows this because the element was activated
+          // during the tap — it does NOT check gestures on subsequent .play() calls
+          // on the same already-unlocked element.
+          const audio = mobileOrTableAudioRef.current ?? new Audio()
+          audio.pause()
+          audio.volume = 3
+          audio.src = "data:audio/wav;base64," + res.audio
+
+          audio.onplay = () => setTimeout(() => setIsSpeaking(true), 50)
+          audio.onended = cleanup
+
+          await audio.play().catch(err => {
+            console.log("Playback failed:", err)
+            cleanup()
+          })
+
+        } else {
           // Chrome / Firefox: fresh Audio element + Web Audio graph for VoiceBars
           const audio = new Audio("data:audio/wav;base64," + res.audio)
 
@@ -144,7 +177,9 @@ const VoiceInput = ({
             console.log("Playback failed:", err)
             cleanup()
           })
-        } catch (err) {
+        }
+
+      } catch (err) {
         console.log(err)
         isProcessingRef.current = false
         onProcessStatus(false)
