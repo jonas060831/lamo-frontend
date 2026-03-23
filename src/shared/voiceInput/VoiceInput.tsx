@@ -22,7 +22,6 @@ type VoiceInputProps = {
 
 const SILENT_WAV = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA"
 
-const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
 
 const VoiceInput = ({
   text,
@@ -56,15 +55,6 @@ const VoiceInput = ({
   const ignoreUntilRef = useRef(0)
 
   const unlockAudio = () => {
-    if (!isSafari) {
-      // Chrome/Firefox: unlock AudioContext
-      if (!audioCtxRef.current || audioCtxRef.current.state === 'closed') {
-        audioCtxRef.current = new AudioContext()
-      }
-      audioCtxRef.current.resume()
-      return
-    }
-
     // Safari: create the Audio element we'll reuse for real playback,
     // and call .play() on it NOW while still inside the gesture.
     // Safari permanently gesture-activates this specific element instance.
@@ -123,26 +113,7 @@ const VoiceInput = ({
 
         setTimeout(cleanup, estimatedDuration + 500)
 
-        if (isSafari) {
-          // Reuse the gesture-unlocked Audio element from the tap.
-          // Pause it (it was playing a silent clip), swap in the real src,
-          // then play. Safari allows this because the element was activated
-          // during the tap — it does NOT check gestures on subsequent .play() calls
-          // on the same already-unlocked element.
-          const audio = safariAudioRef.current ?? new Audio()
-          audio.pause()
-          audio.volume = 1
-          audio.src = "data:audio/wav;base64," + res.audio
-
-          audio.onplay = () => setTimeout(() => setIsSpeaking(true), 50)
-          audio.onended = cleanup
-
-          await audio.play().catch(err => {
-            console.log("Playback failed:", err)
-            cleanup()
-          })
-
-        } else {
+        
           // Chrome / Firefox: fresh Audio element + Web Audio graph for VoiceBars
           const audio = new Audio("data:audio/wav;base64," + res.audio)
 
@@ -173,9 +144,7 @@ const VoiceInput = ({
             console.log("Playback failed:", err)
             cleanup()
           })
-        }
-
-      } catch (err) {
+        } catch (err) {
         console.log(err)
         isProcessingRef.current = false
         onProcessStatus(false)
@@ -262,7 +231,7 @@ const VoiceInput = ({
             ? "Thinking..."
             : "Listening..."
         }>
-          {isSpeaking && analyserRef.current && !isSafari ? (
+          {isSpeaking && analyserRef.current ? (
             <CircleButton
               iconName="animatingVoiceBars"
               iconSize={50}
