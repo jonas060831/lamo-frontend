@@ -138,7 +138,29 @@ const VoiceInput = ({
           audio.volume = 1
           audio.src = "data:audio/wav;base64," + res.audio
 
-          audio.onplay = () => setTimeout(() => setIsSpeaking(true), 50)
+          //set up audio context + analyser for voicebars
+          if(!audioCtxRef.current || audioCtxRef.current.state == 'closed') {
+            audioCtxRef.current = new AudioContext()
+          }
+
+          const ctx = audioCtxRef.current
+          await ctx.resume()
+
+          const analyser = ctx.createAnalyser()
+          analyser.fftSize = 64
+
+          const source = ctx.createMediaElementSource(audio)
+          source.connect(analyser)
+          analyser.connect(ctx.destination)
+
+          analyserRef.current = analyser
+          setAnalyserReady(prev => !prev)
+
+          audio.onplay = () => {
+            ctx.resume()
+            setTimeout(() => setIsSpeaking(true), 50)
+          }
+
           audio.onended = cleanup
 
           await audio.play().catch(err => {
