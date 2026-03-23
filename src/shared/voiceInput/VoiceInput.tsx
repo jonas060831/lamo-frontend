@@ -47,12 +47,13 @@ const VoiceInput = ({
 
   const analyserRef = useRef<AnalyserNode | null>(null)
   const audioCtxRef = useRef<AudioContext | null>(null)
+  const audioSourceRef = useRef<MediaElementAudioSourceNode | null>(null)
 
   // On Safari, this Audio element is created + .play()'d synchronously during
   // the tap gesture. When the real audio arrives we pause it, swap the src,
   // and play again — Safari allows this because the element itself was
   // gesture-activated. A new Audio() created later (outside a gesture) would be blocked.
-  const mobileOrTableAudioRef = useRef<HTMLAudioElement | null>(null)
+  const mobileOrTabletAudioRef = useRef<HTMLAudioElement | null>(null)
 
   const [_, setAnalyserReady] = useState(false)
 
@@ -74,7 +75,7 @@ const VoiceInput = ({
     // Safari permanently gesture-activates this specific element instance.
     const audio = new Audio(SILENT_WAV)
     audio.volume = 0
-    mobileOrTableAudioRef.current = audio
+    mobileOrTabletAudioRef.current = audio
     audio.play().catch(() => {/* ignore — element is now gesture-unlocked */})
   }
 
@@ -133,7 +134,7 @@ const VoiceInput = ({
           // then play. Safari allows this because the element was activated
           // during the tap — it does NOT check gestures on subsequent .play() calls
           // on the same already-unlocked element.
-          const audio = mobileOrTableAudioRef.current ?? new Audio()
+          const audio = mobileOrTabletAudioRef.current ?? new Audio()
           audio.pause()
           audio.volume = 1
           audio.src = "data:audio/wav;base64," + res.audio
@@ -149,8 +150,15 @@ const VoiceInput = ({
           const analyser = ctx.createAnalyser()
           analyser.fftSize = 64
 
-          const source = ctx.createMediaElementSource(audio)
-          source.connect(analyser)
+          if(!audioSourceRef.current) {
+
+            const source = ctx.createMediaElementSource(audio)
+            source.connect(analyser)
+            audioSourceRef.current = source
+          } else {
+            audioSourceRef.current.connect(analyser)
+          }
+
           analyser.connect(ctx.destination)
 
           analyserRef.current = analyser
