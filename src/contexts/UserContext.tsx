@@ -62,6 +62,8 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
   }, [])
 
   const value: UserContextType = { user, setUser }
+
+
   return (
     <UserContext.Provider value={value}>
         {children}

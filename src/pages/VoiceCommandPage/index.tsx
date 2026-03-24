@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const VoiceCommandPage = () => {
   const sessionId = uuidv4()
-
+  
   return (
     <div className={styles.container}>
         <Mistral

@@ -1,8 +1,10 @@
 import { useAuth } from "./contexts/UserContext"
 import DashboardPage from "./pages/Dashboard"
 import LandingPage from "./pages/LandingPage"
+import NotFoundPage from "./pages/NotFoundPage"
 import PureTextPage from "./pages/PureTextPage"
 import VoiceCommandPage from "./pages/VoiceCommandPage"
+import ProtectedRoute from "./ProtectedRoute"
 import SignInForm from "./shared/forms/signIn/SignInForm"
 import Navbar from "./shared/navbar/Navbar"
 import { Routes, Route } from 'react-router'
@@ -15,16 +17,20 @@ const  App = ()  => {
     <>
       <Navbar />
       <Routes>
+
+        {/* Public Pages */}
         <Route path="/" element={ user ? <DashboardPage /> : <LandingPage /> }/>
         <Route path="/sign-in" element={ <SignInForm /> } />
-        {
-          user && (
-            <>
-              <Route path="/voice" element={ <VoiceCommandPage /> } />
-              <Route path="/pure-text" element={ <PureTextPage /> } />
-            </>
-          )
-        }
+
+        {/* Protected Pages */}
+        <Route element={<ProtectedRoute />} >
+          <Route path="/voice" element={ <VoiceCommandPage /> } />
+          <Route path="/pure-text" element={ <PureTextPage /> } />
+        </Route>
+
+        {/* 404 Page */}
+        <Route path="*" element={<NotFoundPage />}/>
+
       </Routes>
     </>
   )
