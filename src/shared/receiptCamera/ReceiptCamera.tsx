@@ -84,13 +84,13 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       <div
         style={{
           position: "absolute",
-          bottom: 10,
+          bottom: 30,
           left: 20,
           padding: "10px 16px",
           zIndex: 10
         }}
       >
-        <CircleButton iconName="cameraFlip" iconSize={10} handleClick={toggleCamera} variant="transparent" />
+        <CircleButton iconName="cameraFlip" iconSize={30} handleClick={toggleCamera} variant="transparent" />
       </div>
 
       {/* Close */}
@@ -102,7 +102,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
           zIndex: 10
         }}
       >
-        <CircleButton iconName="close" iconSize={10} handleClick={onClose} variant="transparent" />
+        <CircleButton iconName="close" iconSize={30} handleClick={onClose} variant="transparent" />
       </div>
 
       
