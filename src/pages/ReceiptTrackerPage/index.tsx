@@ -61,7 +61,7 @@ const ReceiptTrackerPage = () => {
                             top: 0,
                             left: 0,
                             width: "100vw",
-                            height: "90vh",
+                            height: "100vh",
                             background: "black",
                             zIndex: 9999,
                             }}>
