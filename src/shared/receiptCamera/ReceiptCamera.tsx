@@ -92,12 +92,13 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
           pointerEvents: "none"
         }}
       >
+        {/* overlay */}
         <div
           style={{
             width: "78%",   
             height: "84%",  
             marginTop: '-3rem',
-            border: "3px solid white",
+            border: "3px solid #b69bed",
             borderRadius: "12px"
           }}
         />
