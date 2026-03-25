@@ -73,8 +73,8 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
         <div
           style={{
             width: "78%",   
-            height: "80%",  
-            marginTop: '-2rem',
+            height: "84%",  
+            marginTop: '-3rem',
             border: "3px solid white",
             borderRadius: "12px"
           }}
