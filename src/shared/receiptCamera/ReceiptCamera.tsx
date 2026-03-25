@@ -99,7 +99,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
         <div
           style={{
             width: "78%",   
-            height: "84%",  
+            height: "82%",  
             marginTop: '-3rem',
             border: "3px solid white",
             borderRadius: "12px"
@@ -145,7 +145,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
       >
         <img
          src={close}
-         style={{ width: '20px', height: 'auto' }}
+         style={{ width: '40px', height: 'auto' }}
          onClick={onClose}
         />
       </div>
