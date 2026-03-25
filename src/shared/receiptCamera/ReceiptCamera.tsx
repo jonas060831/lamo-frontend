@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
-const ReceiptCamera = ({ onClose , onCapture }: { onClose?: () => void; onCapture: (imageData: string) => void; }) => {
+const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture: (imageData: string) => void; }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
@@ -64,11 +64,9 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose?: () => void; onCaptur
     // convert to image
     const imageDataUrl = canvas.toDataURL("image/jpeg", 0.9)
 
-    console.log("Captured image:", imageDataUrl)
-
     onCapture(imageDataUrl)
 
-    onClose?.()
+    onClose()
     }
 
   return (
@@ -111,10 +109,16 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose?: () => void; onCaptur
           position: "absolute",
           bottom: 35,
           left: 30,
-          zIndex: 10
+          zIndex: 10,
+          display: 'flex',
+          backgroundColor: 'red',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+          gap: '1rem'
         }}
       >
         <CircleButton iconName="cameraFlip" iconSize={40} handleClick={toggleCamera} variant="transparent" />
+        <CircleButton iconName="none" iconSize={40} handleClick={captureImage} />
       </div>
 
       {/* Close */}
@@ -129,17 +133,6 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose?: () => void; onCaptur
         <CircleButton iconName="close" iconSize={20} handleClick={onClose} variant="transparent" />
       </div>
 
-      <div
-       style={{
-        position: "absolute",
-        bottom: 30,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: 10
-       }}
-      >
-            <CircleButton iconName="none" iconSize={40} handleClick={captureImage} />
-      </div>
 
       
     </div>
