@@ -99,7 +99,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
         <div
           style={{
             width: "78%",   
-            height: "82%",  
+            height: "85%",  
             marginTop: '-3rem',
             border: "3px solid white",
             borderRadius: "12px"
@@ -107,11 +107,11 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
         />
       </div>
 
-      {/* Flip */}
+      {/* bottom container */}
       <div
         style={{
           position: "absolute",
-          bottom: 28,
+          bottom: 38,
           left: 30,
           right: 30,
           zIndex: 10,
