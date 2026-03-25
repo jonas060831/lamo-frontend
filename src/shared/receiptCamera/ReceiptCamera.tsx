@@ -48,7 +48,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
   }
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "90vh", background: "none" }}>
+    <div style={{ position: "relative", width: "100%", height: "100vh", background: "none" }}>
       
       {/* Camera */}
       <video
@@ -74,6 +74,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
           style={{
             width: "78%",   
             height: "80%",  
+            marginTop: '-2rem',
             border: "3px solid white",
             borderRadius: "12px"
           }}
@@ -84,8 +85,8 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       <div
         style={{
           position: "absolute",
-          bottom: 30,
-          left: 20,
+          bottom: 35,
+          left: 30,
           zIndex: 10
         }}
       >
