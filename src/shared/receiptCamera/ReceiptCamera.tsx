@@ -72,7 +72,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       >
         <div
           style={{
-            width: "75%",   
+            width: "78%",   
             height: "80%",  
             border: "3px solid white",
             borderRadius: "12px"
@@ -84,7 +84,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       <div
         style={{
           position: "absolute",
-          bottom: 30,
+          bottom: 35,
           left: 20,
           padding: "10px 16px",
           zIndex: 10
@@ -102,7 +102,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
           zIndex: 10
         }}
       >
-        <CircleButton iconName="close" iconSize={30} handleClick={onClose} variant="transparent" />
+        <CircleButton iconName="close" iconSize={20} handleClick={onClose} variant="transparent" />
       </div>
 
       
