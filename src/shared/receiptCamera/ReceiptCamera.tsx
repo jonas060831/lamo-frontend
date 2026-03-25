@@ -109,16 +109,16 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
           position: "absolute",
           bottom: 35,
           left: 30,
+          right: 30,
           zIndex: 10,
           display: 'flex',
-          backgroundColor: 'red',
           alignItems: 'flex-start',
           justifyContent: 'center',
-          gap: '1rem'
+          gap: '2rem'
         }}
       >
         <CircleButton iconName="cameraFlip" iconSize={40} handleClick={toggleCamera} variant="transparent" />
-        <CircleButton iconName="none" iconSize={40} handleClick={captureImage} />
+        <CircleButton iconName="circleDot" iconSize={40} handleClick={captureImage} variant="transparent"/>
       </div>
 
       {/* Close */}
