@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
 const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -47,7 +48,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
   }
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100vh", background: "black" }}>
+    <div style={{ position: "relative", width: "100%", height: "100vh", background: "none" }}>
       
       {/* Camera */}
       <video
@@ -72,7 +73,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
         <div
           style={{
             width: "90%",   
-            height: "65%",  
+            height: "75%",  
             border: "3px solid white",
             borderRadius: "12px"
           }}
@@ -80,22 +81,20 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       </div>
 
       {/* Flip */}
-      <button
-        onClick={toggleCamera}
+      <div
         style={{
           position: "absolute",
-          bottom: 20,
+          bottom: 10,
           left: 20,
           padding: "10px 16px",
           zIndex: 10
         }}
       >
-        Flip
-      </button>
+        <CircleButton iconName="cameraFlip" iconSize={10} handleClick={toggleCamera} variant="transparent" />
+      </div>
 
       {/* Close */}
-      <button
-        onClick={onClose}
+      <div
         style={{
           position: "absolute",
           top: 20,
@@ -103,8 +102,10 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
           zIndex: 10
         }}
       >
-        ✕
-      </button>
+        <CircleButton iconName="close" iconSize={10} handleClick={onClose} variant="transparent" />
+      </div>
+
+      
     </div>
   )
 }

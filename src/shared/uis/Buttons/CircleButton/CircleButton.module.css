@@ -22,3 +22,8 @@
 .link {
     background-color: var(--bg);
 }
+
+.transparent {
+    background: none;
+    background-color: none;
+}

@@ -8,12 +8,14 @@ import mic from '../../../../assets/svgs/mic.svg'
 import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
 import chevronUp from '../../../../assets/svgs/chevronUp.svg'
 import crosshair from '../../../../assets/svgs/crosshair.svg'
+import cameraFlip from '../../../../assets/svgs/cameraFlip.svg'
+import close from '../../../../assets/svgs/close.svg'
 
 import styles from './CircleButton.module.css'
 
 export type CircleButtonProps = {
-    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair'
-    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link'
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair' | 'cameraFlip' | "close"
+    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | "transparent"
     iconSize: number
     type?: 'button' | 'submit'
     element?: ReactNode
@@ -32,7 +34,9 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
         'mic' : mic,
         'horizontalEllipses' : horizontalEllipses,
         'chevronUp' : chevronUp,
-        'crosshair' : crosshair
+        'crosshair' : crosshair,
+        'cameraFlip' : cameraFlip,
+        'close' : close
     }
 
     const svgSource = iconName === 'animatingVoiceBars' ? null :iconMap[iconName]
