@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 
 import cameraFlip from '../../assets/svgs/cameraFlip.svg'
-import close from '../../assets/svgs/cameraFlip.svg'
+import close from '../../assets/svgs/close.svg'
 import circleDot from '../../assets/svgs/circleDot.svg'
 
 const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture: (imageData: string) => void; }) => {
@@ -111,7 +111,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
       <div
         style={{
           position: "absolute",
-          bottom: 35,
+          bottom: 33,
           left: 30,
           right: 30,
           zIndex: 10,
