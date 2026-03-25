@@ -97,7 +97,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       <div
         style={{
           position: "absolute",
-          top: 20,
+          top: 10,
           right: 20,
           zIndex: 10
         }}
