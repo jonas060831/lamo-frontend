@@ -11,6 +11,7 @@ export interface IUser  {
 export type UserContextType = {
     user: IUser | null
     setUser: (value: IUser | null) => void
+    clearUser: () => void
 }
 
 const UserContext = createContext<UserContextType | null>(null)
@@ -61,7 +62,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
   }, [])
 
-  const value: UserContextType = { user, setUser }
+  const value: UserContextType = { user, setUser, clearUser }
 
 
   return (
@@ -88,5 +89,5 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
 
 export {
     UserProvider,
-    UserContext
+    UserContext,
 }

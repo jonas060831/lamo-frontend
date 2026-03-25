@@ -30,7 +30,7 @@ export default function Navbar() {
   const { theme, toggleTheme } = useTheme()
 
 
-  const { user, setUser } = useAuth()
+  const { user, clearUser } = useAuth()
 
 
   const handleDismiss = () => setOpen(false)
@@ -80,11 +80,15 @@ export default function Navbar() {
     handleDismiss()
   }
 
-  const handleSignOut = () => {
-    localStorage.removeItem('token')
-    setUser(null) 
-    setProfile(null)
-    handleDismiss()
+  const handleSignOut = async () => {
+
+    navigate("/", { replace: true }) //TODO:RACE CONDITION HACK FOR NOW
+    setTimeout(() => {
+      setProfile(null)
+      handleDismiss()
+      clearUser()
+      navigate("/sign-in")
+    }, 50)
   }
 
   return (

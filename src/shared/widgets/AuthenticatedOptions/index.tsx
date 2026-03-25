@@ -20,8 +20,8 @@ const aiOptions: { iconName: CircleButtonProps['iconName'], text: string, url: s
     },
     {
         iconName: 'receipt',
-        text: 'Track Your Costco Receipt',
-        url: '/costco-receipt'
+        text: 'Track spending & get your money back',
+        url: '/receipt-tracker'
     }
 
 ]

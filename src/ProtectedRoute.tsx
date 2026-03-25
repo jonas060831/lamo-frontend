@@ -7,7 +7,17 @@ const ProtectedRoute = () => {
   const { user } = useAuth()
   const location = useLocation()
 
-  if(!user) return <Navigate to={`/sign-in?redirectUrl=${location.pathname}`} replace />
+  //detect logout navigation
+
+  if(!user) {
+    return (
+      <Navigate
+       to="/sign-in"
+       state={{ from: location.pathname }}
+       replace
+      />
+    )
+  }
 
   return <Outlet />
 }

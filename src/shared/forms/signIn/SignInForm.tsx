@@ -5,7 +5,7 @@ import TextInput from '../../uis/Inputs/TextInput/TextInput'
 import * as authService from '../../../services/authService'
 import { useAuth } from '../../../contexts/UserContext'
 
-import { Navigate, useLocation } from 'react-router-dom'
+import { Navigate, useLocation, useNavigate } from 'react-router'
 import PillButton from '../../uis/Buttons/PillButton/PillButton'
 
 export type basicAuthType = {
@@ -15,9 +15,8 @@ export type basicAuthType = {
 
 const SignInForm = () => {
   
-  const { search } = useLocation()
-  const queryParams = new URLSearchParams(search)
-  const redirectUrl = queryParams.get('redirectUrl')
+  const location = useLocation()
+  const navigate = useNavigate()
   const { setUser, user } = useAuth()
 
   const [formData, setFormData] = useState({
@@ -25,6 +24,7 @@ const SignInForm = () => {
     password: ''
   })
 
+  const from = location.state?.from || "/"
 
   const [message, setMessage] = useState<string>('1')
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -49,7 +49,7 @@ const SignInForm = () => {
       try {
         const res = await authService.signIn(formData)
         setUser(res)
-
+        navigate(from, { replace: true })
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Server Error'
         setIsLoading(false)
@@ -60,7 +60,7 @@ const SignInForm = () => {
 
 
   //do not render the form instead redirect to /
-  if(user) return <Navigate to={redirectUrl || "/"} replace/>
+  if(user) return <Navigate to={from || "/"} replace/>
 
   return (
     <main className={styles.container}>
