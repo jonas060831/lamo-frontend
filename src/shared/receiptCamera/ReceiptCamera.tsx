@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
 
-const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
+const ReceiptCamera = ({ onClose , onCapture }: { onClose?: () => void; onCapture: (imageData: string) => void; }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
@@ -46,6 +46,30 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
   const toggleCamera = () => {
     setFacingMode(prev => (prev === "user" ? "environment" : "user"))
   }
+
+  const captureImage = () => {
+    if (!videoRef.current) return
+
+    const video = videoRef.current
+
+    const canvas = document.createElement("canvas")
+    canvas.width = video.videoWidth
+    canvas.height = video.videoHeight
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+    // convert to image
+    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.9)
+
+    console.log("Captured image:", imageDataUrl)
+
+    onCapture(imageDataUrl)
+
+    onClose?.()
+    }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100vh", background: "none" }}>
@@ -103,6 +127,18 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
         }}
       >
         <CircleButton iconName="close" iconSize={20} handleClick={onClose} variant="transparent" />
+      </div>
+
+      <div
+       style={{
+        position: "absolute",
+        bottom: 30,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 10
+       }}
+      >
+            <CircleButton iconName="none" iconSize={40} handleClick={captureImage} />
       </div>
 
       

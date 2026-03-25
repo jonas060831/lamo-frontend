@@ -39,6 +39,10 @@ const ReceiptTrackerPage = () => {
     fetchReceipts()
   }, [])
 
+  const handleCapture = (imageData: string) => {
+    console.log(imageData)
+  }
+
   
   if(!receipts) return (
     <div className={styles.container}>
@@ -65,7 +69,7 @@ const ReceiptTrackerPage = () => {
                             background: "black",
                             zIndex: 9999,
                             }}>
-                                <ReceiptCamera onClose={() => setShowCamera(false)} />
+                                <ReceiptCamera onCapture={handleCapture} onClose={() => setShowCamera(false)}/>
                             </div>
                         )}                    
                 </div>

@@ -14,7 +14,7 @@ import close from '../../../../assets/svgs/close.svg'
 import styles from './CircleButton.module.css'
 
 export type CircleButtonProps = {
-    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair' | 'cameraFlip' | "close"
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair' | 'cameraFlip' | "close" | "none"
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | "transparent"
     iconSize: number
     type?: 'button' | 'submit'
@@ -36,7 +36,8 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
         'chevronUp' : chevronUp,
         'crosshair' : crosshair,
         'cameraFlip' : cameraFlip,
-        'close' : close
+        'close' : close,
+        'none' : undefined
     }
 
     const svgSource = iconName === 'animatingVoiceBars' ? null :iconMap[iconName]
