@@ -72,8 +72,8 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       >
         <div
           style={{
-            width: "90%",   
-            height: "75%",  
+            width: "75%",   
+            height: "80%",  
             border: "3px solid white",
             borderRadius: "12px"
           }}
@@ -84,13 +84,13 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       <div
         style={{
           position: "absolute",
-          bottom: 30,
+          bottom: 35,
           left: 20,
           padding: "10px 16px",
           zIndex: 10
         }}
       >
-        <CircleButton iconName="cameraFlip" iconSize={30} handleClick={toggleCamera} variant="transparent" />
+        <CircleButton iconName="cameraFlip" iconSize={40} handleClick={toggleCamera} variant="transparent" />
       </div>
 
       {/* Close */}
