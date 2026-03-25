@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from "react"
-import CircleButton from "../uis/Buttons/CircleButton/CircleButton"
+
+import cameraFlip from '../../assets/svgs/cameraFlip.svg'
+import close from '../../assets/svgs/cameraFlip.svg'
+import circleDot from '../../assets/svgs/circleDot.svg'
 
 const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture: (imageData: string) => void; }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -98,7 +101,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
             width: "78%",   
             height: "84%",  
             marginTop: '-3rem',
-            border: "3px solid #b69bed",
+            border: "3px solid white",
             borderRadius: "12px"
           }}
         />
@@ -118,8 +121,17 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
           gap: '2rem'
         }}
       >
-        <CircleButton iconName="cameraFlip" iconSize={40} handleClick={toggleCamera} variant="transparent" />
-        <CircleButton iconName="circleDot" iconSize={40} handleClick={captureImage} variant="transparent"/>
+        <img
+         src={cameraFlip}
+         style={{ width: '40px', height: 'auto' }}
+         onClick={toggleCamera}
+        /> 
+
+        <img
+         src={circleDot}
+         style={{ width: '40px', height: 'auto' }}
+         onClick={captureImage}
+        /> 
       </div>
 
       {/* Close */}
@@ -131,7 +143,11 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
           zIndex: 10
         }}
       >
-        <CircleButton iconName="close" iconSize={20} handleClick={onClose} variant="transparent" />
+        <img
+         src={close}
+         style={{ width: '20px', height: 'auto' }}
+         onClick={onClose}
+        />
       </div>
 
 
