@@ -61,11 +61,11 @@ const ReceiptTrackerPage = () => {
                             top: 0,
                             left: 0,
                             width: "100vw",
-                            height: "100vh",
+                            height: "00vh",
                             background: "black",
                             zIndex: 9999,
                             }}>
-                                <ReceiptCamera />
+                                <ReceiptCamera onClose={() => setShowCamera(false)} />
                             </div>
                         )}                    
                 </div>
