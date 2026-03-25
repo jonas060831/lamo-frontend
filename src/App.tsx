@@ -3,6 +3,7 @@ import DashboardPage from "./pages/Dashboard"
 import LandingPage from "./pages/LandingPage"
 import NotFoundPage from "./pages/NotFoundPage"
 import PureTextPage from "./pages/PureTextPage"
+import ReceiptTrackerPage from "./pages/ReceiptTrackerPage"
 import VoiceCommandPage from "./pages/VoiceCommandPage"
 import ProtectedRoute from "./ProtectedRoute"
 import SignInForm from "./shared/forms/signIn/SignInForm"
@@ -26,6 +27,7 @@ const  App = ()  => {
         <Route element={<ProtectedRoute />} >
           <Route path="/voice" element={ <VoiceCommandPage /> } />
           <Route path="/pure-text" element={ <PureTextPage /> } />
+          <Route path="/receipt-tracker" element={ <ReceiptTrackerPage /> }/>
         </Route>
 
         {/* 404 Page */}

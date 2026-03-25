@@ -105,7 +105,7 @@ const ChatInput:FC<ChatInputProps> = ({ onResponse, onResponseStatus }) => {
                                 <hr />
                                 <PillButton iconName='crosshair' title='Pure Text' justifyContent='flex-start' handleClick={() => navigate('/pure-text')} variant='translucent' />
                                 <hr />
-                                <PillButton iconName='receipt' title='Receipt Tracker' justifyContent='flex-start' variant='translucent'/>
+                                <PillButton iconName='receipt' title='Receipt Tracker' justifyContent='flex-start' variant='translucent' handleClick={() => navigate('/receipt-tracker')}/>
                                 <hr />
                                 <PillButton iconName='horizontalEllipses' title='More' justifyContent='flex-start' variant='translucent'/>
                             </div>

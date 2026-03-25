@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { getUserFromToken } from "../utils/authHelper";
-import { useLocation, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import DismissModal from "../shared/uis/informational/modals/DismissModal";
 
 export interface IUser  {
@@ -24,7 +24,6 @@ export const useAuth = () => {
 
 const UserProvider = ({ children }: { children: ReactNode }) => {
   const navigate = useNavigate()
-  const { pathname }= useLocation()
   const [user, setUser] = useState<IUser | null>(getUserFromToken())
   const [ isSessionExpired, setIsSessionExpired ] = useState(false)
   const [ isModalOpen, setIsModalOpen ] = useState(false)

@@ -7,11 +7,12 @@ import horizontalEllipses from '../../../../assets/svgs/horizontalEllipses.svg'
 import receipt from '../../../../assets/svgs/receipt.svg'
 import userAdd from '../../../../assets/svgs/userAdd.svg'
 import crosshair from '../../../../assets/svgs/crosshair.svg'
+import upload from '../../../../assets/svgs/upload.svg'
 
 type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'none'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'upload' |'none'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
@@ -31,6 +32,7 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='no
         'receipt' : receipt,
         'userAdd' : userAdd,
         'crosshair' : crosshair,
+        'upload' : upload,
         'none': undefined
     }
 
