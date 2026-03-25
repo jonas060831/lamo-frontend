@@ -76,7 +76,7 @@ const UserProvider = ({ children }: { children: ReactNode }) => {
            onClose={() => {
             setIsModalOpen(false)
             clearUser()
-            navigate(`/sign-in?redirectUrl=${pathname}`)
+            navigate(`/sign-in`)
            }}
            buttonTitle="Ok"
           >
