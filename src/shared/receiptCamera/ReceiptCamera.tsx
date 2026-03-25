@@ -8,20 +8,25 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
 
   const startCamera = async () => {
     try {
-      // stop previous stream before switching
+      console.log("Starting camera:", facingMode)
+
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop())
       }
 
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode }
+        video: {
+          facingMode: { ideal: facingMode }
+        }
       })
 
       streamRef.current = stream
 
       if (videoRef.current) {
         videoRef.current.srcObject = stream
+        await videoRef.current.play().catch(() => {})
       }
+
     } catch (err) {
       console.error("Camera error:", err)
     }
@@ -31,7 +36,6 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
     startCamera()
 
     return () => {
-      // cleanup on unmount
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop())
       }
@@ -43,7 +47,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
   }
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+    <div style={{ position: "relative", width: "100%", height: "100vh", background: "black" }}>
       
       {/* Camera */}
       <video
@@ -54,7 +58,7 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
 
-      {/* Overlay Frame */}
+
       <div
         style={{
           position: "absolute",
@@ -67,15 +71,15 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
       >
         <div
           style={{
-            width: "80%",
-            height: "50%",
+            width: "90%",   
+            height: "65%",  
             border: "3px solid white",
             borderRadius: "12px"
           }}
         />
       </div>
 
-      {/* Toggle Camera Button */}
+      {/* Flip */}
       <button
         onClick={toggleCamera}
         style={{
@@ -83,26 +87,19 @@ const ReceiptCamera = ({ onClose }: { onClose?: () => void }) => {
           bottom: 20,
           left: 20,
           padding: "10px 16px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
           zIndex: 10
         }}
       >
         Flip
       </button>
 
-      {/* Close Button */}
+      {/* Close */}
       <button
         onClick={onClose}
         style={{
           position: "absolute",
           top: 20,
           right: 20,
-          padding: "8px 12px",
-          borderRadius: "8px",
-          border: "none",
-          cursor: "pointer",
           zIndex: 10
         }}
       >
