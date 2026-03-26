@@ -57,7 +57,10 @@ const ReceiptTrackerPage = () => {
     if(success) {
 
         setProcessingMessage('Extraction Began..') //3. Start Extracting data
-        const res = await receiptService.add({text, preview})
+        const receipt = {
+            text, preview
+        }
+        const res = await receiptService.add(receipt)
         
         console.log(res)
 
@@ -74,11 +77,11 @@ const ReceiptTrackerPage = () => {
     setProcessingMessage('Extracting Details...') //1 send blob for TEXT extraction
     try {
         
-        const textResponse = await lamoService.extractReceiptText(formData)
+        const response = await lamoService.extractReceiptText(formData)
 
 
         setProcessingMessage('Processing Data...') //2 text extracted go to data extraction
-        return {text: textResponse, success: true}
+        return {text: response.text, success: true}
 
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Server Error'
