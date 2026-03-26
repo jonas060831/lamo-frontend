@@ -19,12 +19,16 @@ const index = async () => {
     }
 }
 
-const add = async () => {
+
+const add = async (receipt: { text: string, preview: string }) => {
 
     try {
         const options = {
             method: 'POST',
-            headers: { Authorization: `Bearer ${localStorage.getItem('token')}`}
+            headers: { 
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+                body: JSON.stringify(receipt)
+            }
         }
         const response = await fetch(BASE_URL, options)
         
