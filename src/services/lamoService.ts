@@ -73,8 +73,30 @@ const processText = async (text: string, num_reasons: number =3, session_id?: st
     }
 }
 
+const extractReceiptText = async (formData: FormData) => {
+
+    try {
+        
+        const options = {
+            method: 'POST',
+            body: formData
+        }
+        //response is a text form   
+        const response = await fetch(`${BASE_URL}/extract-receipt-details`, options)
+
+        const data = await response.json()
+
+        return data
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        return errorMessage
+    }
+}
+
 export {
     smartQuery, //text query
     voiceQuery, //voice query
-    processText
+    processText,
+    extractReceiptText //google vision api
 }

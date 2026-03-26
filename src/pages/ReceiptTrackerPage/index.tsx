@@ -6,6 +6,8 @@ import ReceiptCamera, { type CaptureResultType } from '../../shared/receiptCamer
 import { getDeviceInfo } from '../../utils/regex/deviceCheck'
 import PillButton from '../../shared/uis/Buttons/PillButton/PillButton'
 
+import * as lamoService from '../../services/lamoService'
+
 
 const ReceiptTrackerPage = () => {
 
@@ -19,6 +21,7 @@ const ReceiptTrackerPage = () => {
   const [receipts ,setReceipts] = useState<null | []>(null)
   const [showCamera, setShowCamera] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
+  const [isProcessing, setIsProcessing] = useState<boolean>(false)
 
   const { isMobileOrTablet } = getDeviceInfo()
 
@@ -43,8 +46,29 @@ const ReceiptTrackerPage = () => {
   const handleCapture = (data: CaptureResultType) => {
     
     const { preview, blob } = data
-    console.log(blob)
+    
+
+    setIsProcessing(true)
     setPreview(preview)
+    sendForProcessing(blob)
+  }
+
+  const sendForProcessing = async (blob: Blob) => {
+
+    const formData = new FormData()
+    formData.append("receipt", blob, "receipt.jpg")
+
+    try {
+        
+        const textResponse = await lamoService.extractReceiptText(formData)
+
+        console.log(textResponse)
+
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        console.log(errorMessage)
+    }
+
   }
 
   
@@ -66,26 +90,32 @@ const ReceiptTrackerPage = () => {
                             <img
                             src={preview}
                             alt='receipt preview'
-                            style={{ width: '50%', borderRadius: '12px' }}
+                            style={{ width: '50%', borderRadius: '12px', margin: 'auto', display: 'flex' }}
                             />
                         )
                     }
-                    
-                    <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
 
-                        {showCamera && (
-                            <div style={{
-                            position: "fixed",
-                            top: 0,
-                            left: 0,
-                            width: "100vw",
-                            height: "100vh",
-                            background: "black",
-                            zIndex: 9999,
-                            }}>
-                                <ReceiptCamera onCapture={handleCapture} onClose={() => setShowCamera(false)}/>
-                            </div>
-                        )}                    
+                    {
+                        isProcessing ? (
+                            <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
+                        ) : (
+                            <h3>Processing</h3>
+                        )
+                    }
+
+                    {showCamera && (
+                        <div style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100vw",
+                        height: "100vh",
+                        background: "black",
+                        zIndex: 9999,
+                        }}>
+                            <ReceiptCamera onCapture={handleCapture} onClose={() => setShowCamera(false)}/>
+                        </div>
+                    )}                    
                 </div>
             ) : (
                 <>
