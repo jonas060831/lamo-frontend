@@ -51,16 +51,6 @@ const ReceiptTrackerPage = () => {
   if(!receipts) return (
     <div className={styles.container}>
 
-        {
-            preview && (
-                <img
-                 src={preview}
-                 alt='receipt preview'
-                 style={{ width: '50%', borderRadius: '12px' }}
-                />
-            )
-        }
-
         <img src={loadingSvg} className='svg' width={80}/>
     </div>
   )
@@ -71,6 +61,16 @@ const ReceiptTrackerPage = () => {
         {
             isMobileOrTablet ? (
                 <div>
+                    {
+                        preview && (
+                            <img
+                            src={preview}
+                            alt='receipt preview'
+                            style={{ width: '50%', borderRadius: '12px' }}
+                            />
+                        )
+                    }
+                    
                     <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
 
                         {showCamera && (
