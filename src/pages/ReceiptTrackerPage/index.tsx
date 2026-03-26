@@ -111,9 +111,9 @@ const ReceiptTrackerPage = () => {
 
                     {
                         isProcessing ? (
-                            <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
-                        ) : (
                             <h3>{processingMessage}</h3>
+                        ) : (
+                            <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
                         )
                     }
 
