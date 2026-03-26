@@ -22,6 +22,7 @@ const ReceiptTrackerPage = () => {
   const [showCamera, setShowCamera] = useState(false)
   const [preview, setPreview] = useState<string | null>(null)
   const [isProcessing, setIsProcessing] = useState<boolean>(false)
+  const [processingMessage, setProcessingMessage] = useState<null | string>(null)
 
   const { isMobileOrTablet } = getDeviceInfo()
 
@@ -43,32 +44,45 @@ const ReceiptTrackerPage = () => {
     fetchReceipts()
   }, [])
 
-  const handleCapture = (data: CaptureResultType) => {
+  const handleCapture = async (data: CaptureResultType) => {
     
     const { preview, blob } = data
     
 
     setIsProcessing(true)
     setPreview(preview)
-    sendForProcessing(blob)
+    const { text, success } = await sendForProcessing(blob)
+
+    if(success) {
+
+        console.log(text)
+        //ok response send to server for formatting and data creation dont forget to include preview
+
+    }
+    else {
+        console.log(text)
+    }
   }
 
-  const sendForProcessing = async (blob: Blob) => {
+  const sendForProcessing = async (blob: Blob):Promise<{ text: string, success: boolean }> => {
 
     const formData = new FormData()
     formData.append("receipt", blob, "receipt.jpg")
-
+    setProcessingMessage('Extracting Details...') //1 send blob for TEXT extraction
     try {
         
         const textResponse = await lamoService.extractReceiptText(formData)
 
-        console.log(textResponse)
+
+        setProcessingMessage('Processing Data...') //2 
+        return {text: textResponse, success: true}
 
     } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Server Error'
         console.log(errorMessage)
+        setProcessingMessage('Error something went wrong')
+        return {text: errorMessage, success: false}
     }
-
   }
 
   
@@ -99,7 +113,7 @@ const ReceiptTrackerPage = () => {
                         isProcessing ? (
                             <PillButton title='Add Receipt' iconName='upload' handleClick={() => setShowCamera(true)} />
                         ) : (
-                            <h3>Processing</h3>
+                            <h3>{processingMessage}</h3>
                         )
                     }
 
