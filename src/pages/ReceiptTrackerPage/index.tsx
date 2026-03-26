@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import * as receiptService from '../../services/receiptService'
 import loadingSvg from '../../assets/svgs/loading.svg'
-import ReceiptCamera from '../../shared/receiptCamera/ReceiptCamera'
+import ReceiptCamera, { type CaptureResultType } from '../../shared/receiptCamera/ReceiptCamera'
 import { getDeviceInfo } from '../../utils/regex/deviceCheck'
 import PillButton from '../../shared/uis/Buttons/PillButton/PillButton'
 
@@ -18,6 +18,7 @@ const ReceiptTrackerPage = () => {
 
   const [receipts ,setReceipts] = useState<null | []>(null)
   const [showCamera, setShowCamera] = useState(false)
+  const [preview, setPreview] = useState<string | null>(null)
 
   const { isMobileOrTablet } = getDeviceInfo()
 
@@ -39,13 +40,26 @@ const ReceiptTrackerPage = () => {
     fetchReceipts()
   }, [])
 
-  const handleCapture = (imageData: string) => {
-    console.log(imageData)
+  const handleCapture = (data: CaptureResultType) => {
+    
+    const { preview, blob } = data
+    console.log(blob)
+    setPreview(preview)
   }
 
   
   if(!receipts) return (
     <div className={styles.container}>
+
+        {
+            preview && (
+                <img
+                 src={preview}
+                 alt='receipt preview'
+                 style={{ width: '50%', borderRadius: '12px' }}
+                />
+            )
+        }
 
         <img src={loadingSvg} className='svg' width={80}/>
     </div>

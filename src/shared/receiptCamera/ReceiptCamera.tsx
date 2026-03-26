@@ -4,11 +4,18 @@ import cameraFlip from '../../assets/svgs/cameraFlip.svg'
 import close from '../../assets/svgs/close.svg'
 import circleDot from '../../assets/svgs/circleDot.svg'
 
-const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture: (imageData: string) => void; }) => {
+export type CaptureResultType = {
+    preview: string
+    blob: Blob
+}
+
+const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture: (data: CaptureResultType) => void; }) => {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
   const [facingMode, setFacingMode] = useState<"user" | "environment">("environment")
+
+  const overlayRef = useRef<HTMLDivElement>(null)
 
   const startCamera = async () => {
     try {
@@ -36,6 +43,63 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
     }
   }
 
+  const toggleCamera = () => {
+    setFacingMode(prev => (prev === "user" ? "environment" : "user"))
+  }
+
+  const captureImage = () => {
+    if (!videoRef.current || !overlayRef.current) return
+
+    const video = videoRef.current
+    const overlay = overlayRef.current
+
+    // DOM dimensions
+    const videoRect = video.getBoundingClientRect()
+    const overlayRect = overlay.getBoundingClientRect()
+
+    // scale from DOM → actual video pixels
+    const scaleX = video.videoWidth / videoRect.width
+    const scaleY = video.videoHeight / videoRect.height
+
+    // calculate crop area
+    const cropX = (overlayRect.left - videoRect.left) * scaleX
+    const cropY = (overlayRect.top - videoRect.top) * scaleY
+    const cropWidth = overlayRect.width * scaleX
+    const cropHeight = overlayRect.height * scaleY
+
+    // draw to canvas
+    const canvas = document.createElement("canvas")
+    canvas.width = cropWidth
+    canvas.height = cropHeight
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    ctx.drawImage(
+        video,
+        cropX,
+        cropY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight
+    )
+
+    const preview = canvas.toDataURL("image/jpeg", 0.9)
+
+    canvas.toBlob((blob) => {
+        
+        if(!blob) return
+        //send to parent
+        onCapture({preview, blob })
+
+    }, "image/jpeg", 0.9)
+
+    onClose()
+   }
+
   useEffect(() => {
     startCamera()
 
@@ -45,32 +109,6 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
       }
     }
   }, [facingMode])
-
-  const toggleCamera = () => {
-    setFacingMode(prev => (prev === "user" ? "environment" : "user"))
-  }
-
-  const captureImage = () => {
-    if (!videoRef.current) return
-
-    const video = videoRef.current
-
-    const canvas = document.createElement("canvas")
-    canvas.width = video.videoWidth
-    canvas.height = video.videoHeight
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-
-    // convert to image
-    const imageDataUrl = canvas.toDataURL("image/jpeg", 0.9)
-
-    onCapture(imageDataUrl)
-
-    onClose()
-    }
 
   return (
     <div style={{ position: "relative", width: "100%", height: "100vh", background: "none" }}>
@@ -97,13 +135,14 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
       >
         {/* overlay */}
         <div
-          style={{
-            width: "78%",   
-            height: "85%",  
-            marginTop: '-3rem',
-            border: "3px solid white",
-            borderRadius: "12px"
-          }}
+         ref={overlayRef}
+         style={{
+          width: "78%",   
+          height: "85%",  
+          marginTop: '-3rem',
+          border: "3px solid white",
+          borderRadius: "12px"
+        }}
         />
       </div>
 
@@ -111,7 +150,7 @@ const ReceiptCamera = ({ onClose , onCapture }: { onClose: () => void; onCapture
       <div
         style={{
           position: "absolute",
-          bottom: 40,
+          bottom: 42,
           left: 30,
           right: 30,
           zIndex: 10,
