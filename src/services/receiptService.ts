@@ -33,7 +33,7 @@ const add = async (receipt: { text: string, preview: string}) => {
         }
         const response = await fetch(BASE_URL, options)
         
-        const data = response.json()
+        const data = await response.json()
 
         return data
 
