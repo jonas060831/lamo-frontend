@@ -57,12 +57,19 @@ const ReceiptTrackerPage = () => {
     if(success) {
 
         setProcessingMessage('Extraction Began..') //3. Start Extracting data
-        const receipt = {
-            text, preview
-        }
-        const res = await receiptService.add(receipt)
+        const receipt = { text, preview }
+
+        console.log(receipt)
         
-        console.log(res)
+        try {
+            const res = await receiptService.add(receipt)
+        
+            console.log(res)
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Server Error'
+            console.log(errorMessage)
+            setProcessingMessage(errorMessage)
+        }
 
     }
     else {
