@@ -1,0 +1,31 @@
+.container {
+    position: relative;
+    height: 87vh;
+    display: flex;
+    overflow-y: scroll;
+    display: flex;
+    padding: 0px 5vw;
+    flex-direction: column;
+}
+
+.cardContainer {
+    display: flex;
+    flex-direction: row;
+}
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+@media (max-width: 767px) {
+
+    .container {
+        padding: 0px;
+    }
+    .cardContainer {
+        margin: 0rem 1rem 0rem 1rem;
+        flex-direction: column;
+    }
+}
