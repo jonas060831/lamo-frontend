@@ -8,7 +8,6 @@ import ReceiptsFilter from "./ReceiptsFilter"
 
 const ReceiptList = ({ receipts }: { receipts: ParsedReceipt[] }) => {
   
-  console.log(receipts)
 
   return (
     <div className={styles.container}>
@@ -20,6 +19,7 @@ const ReceiptList = ({ receipts }: { receipts: ParsedReceipt[] }) => {
             {
                 receipts.map((receipt, index) => (
                     <ReceiptCard key={index} receipt={receipt}/>
+                    
                 ))
             }
         </div>

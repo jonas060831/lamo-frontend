@@ -1,3 +1,5 @@
+import type { ParsedItem } from "../hooks/useReceipts";
+
 const BASE_URL = `${import.meta.env.VITE_SERVER_URL}/receipts`;
 
 const index = async () => {
@@ -43,8 +45,30 @@ const add = async (receipt: { text: string, preview: string}) => {
     }
 }
 
+const computePriceDrop = async(items: ParsedItem[], company: string, storeNumber: string) => {
+    try {
+        const options = {
+            method: 'POST',
+            headers: { 
+                'Content-Type' : 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({items, company, storeNumber})
+        }
+        const response = await fetch(`${BASE_URL}/compute-price-drop`, options)
+
+        const data = response.json()
+
+        return data
+    } catch (error) {
+        const errorMessage = error instanceof Error ? error.message : 'Server Error'
+        return errorMessage
+    }
+}
+
 
 export {
  index,
- add
+ add,
+ computePriceDrop
 }

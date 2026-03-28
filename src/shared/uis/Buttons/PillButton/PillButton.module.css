@@ -48,6 +48,16 @@
     background-color: red;
 }
 
+.success {
+    background-color: green;
+    color: white;
+}
+
+.info {
+    background-color: rgb(245, 183, 11);
+    color: white;
+}
+
 
 /* Dark theme */
 html[data-theme="dark"] {

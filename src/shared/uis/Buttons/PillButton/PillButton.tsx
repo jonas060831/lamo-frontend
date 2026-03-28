@@ -8,11 +8,12 @@ import receipt from '../../../../assets/svgs/receipt.svg'
 import userAdd from '../../../../assets/svgs/userAdd.svg'
 import crosshair from '../../../../assets/svgs/crosshair.svg'
 import upload from '../../../../assets/svgs/upload.svg'
+import checkMark from '../../../../assets/svgs/checkmark.svg'
 
 type PillButtonProps = {
     title: string
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'upload' |'none'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'upload' | 'checkMark' |'none'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
@@ -33,13 +34,16 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='no
         'userAdd' : userAdd,
         'crosshair' : crosshair,
         'upload' : upload,
-        'none': undefined
+        'checkMark' : checkMark,
+        'none': undefined,
     }
 
     const svgSource = iconMap[iconName]
+
+    const className = variant === 'success' || variant === 'info' ? 'svgWhite' : 'svg'
     return (
         <img
-         className="svg"
+         className={className}
          src={svgSource}
          width='20px'
          height='auto'

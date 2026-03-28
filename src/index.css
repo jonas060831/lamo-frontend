@@ -21,6 +21,11 @@ a {
 }
 
 
+/* for now  */
+.svgWhite {
+    filter: invert();
+}
+
 
 /* preferences */
 

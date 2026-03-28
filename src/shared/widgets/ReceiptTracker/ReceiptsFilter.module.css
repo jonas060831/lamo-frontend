@@ -3,4 +3,21 @@
     padding: 2rem 1rem 2rem ;
     color: black;
     margin-bottom: 1rem;
+    border-radius: 12px;
+}
+
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+@media (min-width: 768px) and (max-width: 1023px) {}
+
+/* Phone Styles */
+@media (max-width: 767px) {
+    .container {
+        position: absolute;
+        left: 0;
+        right: 0;
+    }
 }

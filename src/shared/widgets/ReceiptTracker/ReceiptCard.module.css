@@ -3,6 +3,21 @@
     border-radius: 12px;
     padding: 1rem 2rem;
     cursor: pointer;
+    min-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.538);
+}
+
+.footer {
+    background-color: #d6eeff;
+    padding: 0.5rem;
+    border-radius: 12px;
+    width: 100%;
+}
+.footer span {
+    color: gray;
 }
 
 
@@ -10,11 +25,16 @@
 /* @media (min-width: 1024px) {} */
 
 /* Tablet Styles */
-/* @media (min-width: 768px) and (max-width: 1023px) {} */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .container {
+        width: 100%;
+    }
+}
 
 /* Phone Styles */
 @media (max-width: 767px) {
     .container {
-        width: 100%;
+        min-width: 95%;
+        height: 265px;
     }
 }
