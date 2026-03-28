@@ -26,7 +26,10 @@ const ReceiptCard = ({ receipt }: { receipt: ParsedReceipt }) => {
   useEffect(() => {
     const getData = async () => {
         try {
-            const data = await receiptService.computePriceDrop(receipt.items, receipt.company, receipt.storeNumber)
+            
+            const receiptDate = new Date(receipt.date!)
+
+            const data = await receiptService.computePriceDrop(receipt.items, receipt.company, receipt.storeNumber, receiptDate)
 
             setPriceDropData(data)
         } catch (error) {
@@ -42,6 +45,31 @@ const ReceiptCard = ({ receipt }: { receipt: ParsedReceipt }) => {
   if(!priceDropData) return (
     <div className={styles.container}>
         <img src={loadingSpinner}  style={{ width: '3rem' }}/>
+    </div>
+  )
+
+  if(priceDropData.totalBack < 0) return (
+    <div className={`${styles.container} ${styles.expired}`}>
+        <div style={{ display: 'flex', flexDirection: 'row',justifyContent: 'space-between' }}>
+            <img src={companyLogo[receipt.company]} alt={receipt.company} style={{ width: '6rem' }}/>
+            
+            <div>
+                <PillButton title="Ineligible" iconName="none" variant='translucent' />
+            </div>
+        </div>
+
+        <span style={{ visibility: 'hidden' }}>|</span>
+
+        <h3>You spent: $ {receipt.total?.toFixed(2)}</h3>
+
+        <div style={{ color: 'gray' }} className={styles.priceDropIndicator}>
+            Receipt is outside the price adjustment window
+        </div>
+
+        <div className={styles.footer}>
+            <span>Tracking window: </span> <span style={{ color: 'red' }}>Expired</span><br />
+            <span>Tracking Stop: <span style={{ fontWeight: 'bolder' }}>{addOneMonth(receipt!.date!)}</span></span>
+        </div>
     </div>
   )
   

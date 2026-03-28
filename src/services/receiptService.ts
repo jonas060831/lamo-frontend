@@ -45,7 +45,7 @@ const add = async (receipt: { text: string, preview: string}) => {
     }
 }
 
-const computePriceDrop = async(items: ParsedItem[], company: string, storeNumber: string) => {
+const computePriceDrop = async(items: ParsedItem[], company: string, storeNumber: string, receiptDate: Date) => {
     try {
         const options = {
             method: 'POST',
@@ -53,7 +53,7 @@ const computePriceDrop = async(items: ParsedItem[], company: string, storeNumber
                 'Content-Type' : 'application/json',
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             },
-            body: JSON.stringify({items, company, storeNumber})
+            body: JSON.stringify({items, company, storeNumber, receiptDate})
         }
         const response = await fetch(`${BASE_URL}/compute-price-drop`, options)
 
