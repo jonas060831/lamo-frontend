@@ -5,5 +5,24 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
     
+}
+
+.header {
+    width: 25vw;
+}
+
+
+/* Desktop Styles */
+/* @media (min-width: 1024px) {} */
+
+/* Tablet Styles */
+/* @media (min-width: 768px) and (max-width: 1023px) {} */
+
+/* Phone Styles */
+@media (max-width: 767px) {
+    .header {
+        width: 85vw;
+    }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import loadingSvg from '../../assets/svgs/loading.svg'
 import { getDeviceInfo } from '../../utils/regex/deviceCheck'
@@ -8,6 +8,7 @@ import ReceiptList from '../../shared/widgets/ReceiptTracker/ReceiptList'
 import { useReceipts } from '../../hooks/useReceipts'
 import { useReceiptDataProcessing } from '../../hooks/useReceiptDataProcess'
 
+import partners from '../../assets/images/header/partners.png'
 
 
 
@@ -25,6 +26,7 @@ const ReceiptTrackerPage = () => {
   const { isMobileOrTablet } = getDeviceInfo()
   const { receipts, addReceipt } = useReceipts()
 
+
   const {
     preview,
     isProcessing,
@@ -41,6 +43,8 @@ const ReceiptTrackerPage = () => {
   //no receipts yet after fetch
   if(receipts.length === 0) return (
     <div className={styles.container}>
+
+        <img className={styles.header} src={partners} alt='receipt empty header'/>
 
         <EmptyState
          isMobileOrTablet={isMobileOrTablet}
