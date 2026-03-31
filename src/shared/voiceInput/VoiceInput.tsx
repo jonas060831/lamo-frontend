@@ -265,7 +265,11 @@ const VoiceInput = ({
     {
       label: "Receipts",
       component: (
-        <CircleButton iconName="receipt" iconSize={20} />
+        <CircleButton
+         iconName="receipt"
+         iconSize={20}
+         handleClick={() => navigate('/receipt-tracker', { replace: true })}
+        />
       )
     },
   ]
