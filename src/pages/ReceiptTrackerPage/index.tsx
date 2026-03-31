@@ -9,12 +9,17 @@ import { useReceipts } from '../../hooks/useReceipts'
 import { useReceiptDataProcessing } from '../../hooks/useReceiptDataProcess'
 
 import partners from '../../assets/images/header/partners.png'
+import CircleButton from '../../shared/uis/Buttons/CircleButton/CircleButton'
+import { useNavigate } from 'react-router'
+import { Dock } from '../../shared/uis/navigational/Dock/Dock'
 
 
 
 const ReceiptTrackerPage = () => {
 
-  
+  const navigate = useNavigate()
+
+  const [highlightedIndex, setHighlightedIndex] = useState(3)
   //fetch if any receipts
 
   //if none show add receipt empty page
@@ -58,7 +63,54 @@ const ReceiptTrackerPage = () => {
     </div>
   )
   //receipts array is populated
-  return <ReceiptList receipts={receipts}/>
+
+  const aiSelection = [
+      {
+          label: "Chat",
+          component: (
+          <CircleButton
+              iconName="ai"
+              iconSize={20}
+              handleClick={() => navigate("/")}
+          />
+          ),
+      },
+      {
+          // label: isLoading ? undefined : "Tap to Speak",
+          label: 'Voice',
+          component: (
+            <CircleButton
+              iconName='voice'
+              iconSize={20}
+              handleClick={() => navigate('/voice', { replace: true })}
+            />
+          )
+      },
+      {
+          label: "Pure Text",
+          component: 
+          <CircleButton
+            iconName="crosshair"
+            iconSize={20}
+            handleClick={() => navigate("/pure-text", { replace: true })}
+          />,
+      },
+      {
+          label: "Receipts",
+          component:
+          <CircleButton
+            iconName="receipt"
+            iconSize={20}
+            handleClick={() => navigate('/receipt-tracker', { replace: true })}
+          />,
+      },
+  ];
+
+
+  return <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <ReceiptList receipts={receipts}/>
+    <Dock items={aiSelection} highlightedIndex={highlightedIndex} setHighlightedIndex={setHighlightedIndex}/>
+  </div>
 }
 
 export default ReceiptTrackerPage
