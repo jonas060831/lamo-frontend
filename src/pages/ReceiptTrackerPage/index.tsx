@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import styles from './index.module.css'
 import loadingSvg from '../../assets/svgs/loading.svg'
 import { getDeviceInfo } from '../../utils/regex/deviceCheck'
