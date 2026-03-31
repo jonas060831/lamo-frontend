@@ -37,11 +37,21 @@ const PureTextPage = () => {
         },
         {
             label: "Pure Text",
-            component: <CircleButton iconName="crosshair" iconSize={20} handleClick={() => navigate("/pure-text", { replace: true })}/>,
+            component: 
+            <CircleButton
+             iconName="crosshair"
+             iconSize={20}
+             handleClick={() => navigate("/pure-text", { replace: true })}
+            />,
         },
         {
             label: "Receipts",
-            component: <CircleButton iconName="receipt" iconSize={20} />,
+            component:
+            <CircleButton
+             iconName="receipt"
+             iconSize={20}
+             handleClick={() => navigate('/receipt-tracker', { replace: true })}
+            />,
         },
     ];
 
