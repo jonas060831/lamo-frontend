@@ -11,11 +11,12 @@ import crosshair from '../../../../assets/svgs/crosshair.svg'
 import cameraFlip from '../../../../assets/svgs/cameraFlip.svg'
 import close from '../../../../assets/svgs/close.svg'
 import circleDot from '../../../../assets/svgs/circleDot.svg'
+import upload from '../../../../assets/svgs/upload.svg'
 
 import styles from './CircleButton.module.css'
 
 export type CircleButtonProps = {
-    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair' | 'cameraFlip' | "close" | "circleDot" | "none"
+    iconName: 'ai' | 'loading' | 'voice' | 'receipt' | 'mic' | 'horizontalEllipses' | 'chevronUp' | 'animatingVoiceBars' | 'crosshair' | 'cameraFlip' | "close" | "circleDot" | "upload" | "none"
     variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | "transparent"
     iconSize: number
     type?: 'button' | 'submit'
@@ -39,6 +40,7 @@ const CircleButton:FC<CircleButtonProps> = ({ iconName, variant='dynamic',iconSi
         'cameraFlip' : cameraFlip,
         'close' : close,
         'circleDot' : circleDot,
+        'upload' : upload,
         'none' : undefined
     }
 

@@ -1,12 +1,11 @@
 
 .container {
     width: 100vw;
-    height: 92vh;
+    height: 83vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    
 }
 
 .header {
@@ -24,5 +23,8 @@
 @media (max-width: 767px) {
     .header {
         width: 85vw;
+    }
+    .container {
+        margin-top: 3rem;
     }
 }

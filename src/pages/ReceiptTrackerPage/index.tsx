@@ -9,17 +9,13 @@ import { useReceipts } from '../../hooks/useReceipts'
 import { useReceiptDataProcessing } from '../../hooks/useReceiptDataProcess'
 
 import partners from '../../assets/images/header/partners.png'
+import ReceiptsFilter from '../../shared/widgets/ReceiptTracker/ReceiptsFilter'
+import ReceiptCamera from '../../shared/receiptCamera/ReceiptCamera'
 import CircleButton from '../../shared/uis/Buttons/CircleButton/CircleButton'
-import { useNavigate } from 'react-router'
-import { Dock } from '../../shared/uis/navigational/Dock/Dock'
-
-
 
 const ReceiptTrackerPage = () => {
 
-  const navigate = useNavigate()
 
-  const [highlightedIndex, setHighlightedIndex] = useState(3)
   //fetch if any receipts
 
   //if none show add receipt empty page
@@ -64,63 +60,37 @@ const ReceiptTrackerPage = () => {
   )
   //receipts array is populated
 
-  const aiSelection = [
-      {
-          label: "Chat",
-          component: (
-          <CircleButton
-              iconName="ai"
-              iconSize={20}
-              handleClick={() => navigate("/")}
-          />
-          ),
-      },
-      {
-          // label: isLoading ? undefined : "Tap to Speak",
-          label: 'Voice',
-          component: (
-            <CircleButton
-              iconName='voice'
-              iconSize={20}
-              handleClick={() => navigate('/voice', { replace: true })}
-            />
-          )
-      },
-      {
-          label: "Pure Text",
-          component: 
-          <CircleButton
-            iconName="crosshair"
-            iconSize={20}
-            handleClick={() => navigate("/pure-text", { replace: true })}
-          />,
-      },
-      {
-          label: "Receipts",
-          component:
-          <CircleButton
-            iconName="receipt"
-            iconSize={20}
-            handleClick={() => navigate('/receipt-tracker', { replace: true })}
-          />,
-      },
-  ];
-
-
-  return <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+  return <div className={styles.container}>
     
-    <EmptyState
-      isMobileOrTablet={isMobileOrTablet}
-      preview={preview}
-      isProcessing={isProcessing}
-      processingMessage={processingMessage}
-      showCamera={showCamera}
-      setShowCamera={setShowCamera}
-      onCapture={handleCapture}
-    />
+    
+    <ReceiptsFilter receipts={receipts}/>
     
     <ReceiptList receipts={receipts}/>
-    <Dock items={aiSelection} highlightedIndex={highlightedIndex} setHighlightedIndex={setHighlightedIndex}/>
+    {/* show only upload receipt on tablet or mobile */}
+    {
+      isMobileOrTablet && 
+       <CircleButton
+        iconName='upload'
+        iconSize={30}
+        handleClick={() => setShowCamera(true)}
+      />
+    }
+
+    {(showCamera) && (
+        <div style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        width: "100vw",
+        height: "100vh",
+        background: "black",
+        zIndex: 9999,
+        }}>
+            <ReceiptCamera onCapture={handleCapture} onClose={() => setShowCamera(false)}/>
+        </div>
+    )}
+
   </div>
 }
 

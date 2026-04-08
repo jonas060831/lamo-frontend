@@ -42,4 +42,10 @@
         min-width: 95%;
         height: 265px;
     }
+    .container:first-child {
+        margin-top: 1rem;
+    }
+    .container:last-child {
+        margin-bottom: 1rem;
+    }
 }

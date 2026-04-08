@@ -50,9 +50,11 @@ const EmptyState = ({isMobileOrTablet, preview, isProcessing, processingMessage,
                     )}                    
                 </div>
             ) : (
-                <>
-                upload receipt
-                </>
+                // desktop screen
+                // <>
+                // upload receipt
+                // </>
+                null
             )
         }
     </div>
