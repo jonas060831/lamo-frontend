@@ -108,6 +108,17 @@ const ReceiptTrackerPage = () => {
 
 
   return <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    
+    <EmptyState
+      isMobileOrTablet={isMobileOrTablet}
+      preview={preview}
+      isProcessing={isProcessing}
+      processingMessage={processingMessage}
+      showCamera={showCamera}
+      setShowCamera={setShowCamera}
+      onCapture={handleCapture}
+    />
+    
     <ReceiptList receipts={receipts}/>
     <Dock items={aiSelection} highlightedIndex={highlightedIndex} setHighlightedIndex={setHighlightedIndex}/>
   </div>
