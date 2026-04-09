@@ -13,6 +13,24 @@ import ReceiptsFilter from '../../shared/widgets/ReceiptTracker/ReceiptsFilter'
 import ReceiptCamera from '../../shared/receiptCamera/ReceiptCamera'
 import CircleButton from '../../shared/uis/Buttons/CircleButton/CircleButton'
 
+
+
+export const COMPANIES = [
+    'costco',
+    'sams club',
+    'the home depot',
+    'abt',
+    'target',
+    'apple',
+    ''
+    ] as const
+
+export type Company = typeof COMPANIES[number]
+
+export type FiltersType = {
+  company: Company
+  sortByDate: string
+}
 const ReceiptTrackerPage = () => {
 
 
@@ -27,6 +45,28 @@ const ReceiptTrackerPage = () => {
   const { isMobileOrTablet } = getDeviceInfo()
   const { receipts, addReceipt } = useReceipts()
 
+  const [filters, setFilters] = useState<FiltersType>({
+    company: '',
+    sortByDate: 'newest'
+  })
+
+  const filteredReceipts = [...(receipts || [])]
+  .filter((receipt) => {
+    //via company
+    if(!filters.company) return true
+    return receipt.company == filters.company
+  })
+    //via oldest | newest
+  .sort((a, b) => {
+      const dateA = new Date(a.createdAt).getTime()
+      const dateB = new Date(b.createdAt).getTime()
+
+      if(filters.sortByDate === "oldest") {
+        return dateA - dateB //oldest first
+      } else {
+        return dateB - dateA //newest first
+      }
+  })
 
   const {
     preview,
@@ -63,9 +103,13 @@ const ReceiptTrackerPage = () => {
   return <div className={styles.container}>
     
     
-    <ReceiptsFilter receipts={receipts}/>
+    <ReceiptsFilter
+     filters={filters}
+     setFilters={setFilters}
+     receipts={receipts}
+    />
     
-    <ReceiptList receipts={receipts}/>
+    <ReceiptList receipts={filteredReceipts || []}/>
     {/* show only upload receipt on tablet or mobile */}
     {
       isMobileOrTablet && 

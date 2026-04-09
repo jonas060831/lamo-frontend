@@ -43,6 +43,9 @@
 .translucent:hover {
     background-color: rgba(0, 0, 0, 0.127);
 }
+.transparent {
+    background-color: rgba(0, 0, 0, 0);
+}
 
 .danger {
     background-color: red;

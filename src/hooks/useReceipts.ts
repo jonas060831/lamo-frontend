@@ -21,6 +21,7 @@ export interface ParsedReceipt {
   date?: string
   totalItemsSold?: number
   preview?: string
+  createdAt: string
 }
 
 

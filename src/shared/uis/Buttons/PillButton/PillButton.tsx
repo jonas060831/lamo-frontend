@@ -9,11 +9,12 @@ import userAdd from '../../../../assets/svgs/userAdd.svg'
 import crosshair from '../../../../assets/svgs/crosshair.svg'
 import upload from '../../../../assets/svgs/upload.svg'
 import checkMark from '../../../../assets/svgs/checkmark.svg'
+import chevronUp from '../../../../assets/svgs/chevronUp.svg'
 
 type PillButtonProps = {
     title: string
-    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent'
-    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'upload' | 'checkMark' |'none'
+    variant?: 'dynamic' | 'dark' | 'light' | 'success' | 'danger' | 'info' | 'link' | 'translucent' | 'transparent'
+    iconName?: 'arrowRight' | 'loading' | 'voice' | 'horizontalEllipses' | 'receipt' | 'userAdd' | 'crosshair' | 'upload' | 'checkMark' | 'chevronUp' |'none'
     justifyContent?: 'flex-start' | 'center' | 'flexEnd'
     handleClick?: () => void
 }
@@ -35,6 +36,7 @@ const PillButton:FC<PillButtonProps> = ({ title, variant='dynamic', iconName='no
         'crosshair' : crosshair,
         'upload' : upload,
         'checkMark' : checkMark,
+        'chevronUp' : chevronUp,
         'none': undefined,
     }
 
